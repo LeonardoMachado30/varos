@@ -1,31 +1,64 @@
-import React from "react";
+import { FormInput } from "@/components/atomic/input/FormInput";
+import { FormSelect } from "@/components/atomic/input/FormSelect";
+import { PrimaryButton } from "@/components/atomic/button/PrimaryButton";
+import Table from "@/components/organims/Table";
+import { useForm, FormProvider } from "react-hook-form";
 
 export default function DashboardPage() {
+  const methods = useForm({
+    defaultValues: {
+      nome: "",
+      status: "",
+    },
+  });
+
+  const { handleSubmit } = methods;
+
+  const onSubmit = (data: any) => {
+    console.log("Filtros aplicados:", data);
+    // chamada API futura
+  };
+
   return (
-    <main className="min-h-screen bg-gray-50 p-8">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-          <span className="text-2xl font-semibold text-blue-600">145</span>
-          <span className="mt-2 text-gray-600">Novos Clientes</span>
+    <div className="min-h-screen p-6 bg-[var(--bg-light)]">
+      <div className="max-w-7xl mx-auto bg-[var(--bg-card)] rounded-2xl shadow p-6">
+        <h1 className="text-2xl font-semibold mb-6 text-[var(--secondary)]">
+          Dashboard de Clientes
+        </h1>
+
+        <FormProvider {...methods}>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8"
+          >
+            <FormInput
+              name="nome"
+              label="Nome do Cliente"
+              placeholder="Pesquisar por nome..."
+              inputProps={{
+                classNameContainer: "col-span-2",
+              }}
+            />
+
+            <FormSelect name="status" label="Status" placeholder="Selecione...">
+              <option value="">Todos</option>
+              <option value="ativo">Ativo</option>
+              <option value="inativo">Inativo</option>
+            </FormSelect>
+
+            <div className="flex items-end">
+              <PrimaryButton type="submit" className="w-full">
+                Aplicar filtros
+              </PrimaryButton>
+            </div>
+          </form>
+        </FormProvider>
+
+        {/* Tabela principal */}
+        <div className="rounded-lg border border-[var(--border-color)] bg-white p-4">
+          <Table />
         </div>
-        <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-          <span className="text-2xl font-semibold text-green-600">32</span>
-          <span className="mt-2 text-gray-600">Consultores Ativos</span>
-        </div>
-        <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center">
-          <span className="text-2xl font-semibold text-purple-600">27</span>
-          <span className="mt-2 text-gray-600">Atendimentos Hoje</span>
-        </div>
-      </section>
-      <section className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">Resumo</h2>
-        <p className="text-gray-700">
-          Bem-vindo ao painel de controle! Aqui você pode visualizar
-          informações-chave sobre seus clientes, consultores e atendimentos
-          diários.
-        </p>
-      </section>
-    </main>
+      </div>
+    </div>
   );
 }
