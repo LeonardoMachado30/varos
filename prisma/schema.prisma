@@ -20,11 +20,15 @@ model Pessoa {
     nome           String
     cpf            String?
     dataNascimento DateTime?
+    telefone       String?
+    email          String?
+    idade          Int?
     createdAt      DateTime     @default(now())
     updatedAt      DateTime     @updatedAt
 
     cliente Cliente?
     consultor Consultor?
+    endereco Endereco?
 
     @@unique([cpf])
 }
@@ -35,6 +39,7 @@ model Consultor {
     pessoa   Pessoa @relation(fields: [pessoaId], references: [id])
     pessoaId String  @unique
 
+    clientes Cliente[]
 }
 
 
@@ -52,5 +57,26 @@ model Cliente {
     pessoa   Pessoa @relation(fields: [pessoaId], references: [id])
     pessoaId String  @unique
 
+    consultor Consultor? @relation(fields: [consultorId], references: [id])
+    consultorId String? @unique
+
     @@index([pessoaId])
+}
+
+model Endereco {
+  id String @id @default(uuid(7))
+  cep String
+  estado String
+  cidade String?
+  bairro String?
+  rua String?
+  numero String?
+  complemento String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  pessoa Pessoa? @relation(fields: [pessoaId], references: [id])
+  pessoaId String? @unique
+
+  @@index([pessoaId])
 }

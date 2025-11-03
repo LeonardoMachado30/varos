@@ -3,18 +3,19 @@ import prisma from "@/lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {
-    const { nome, email, telefone, cpf, idade, endereco } =
+    const { tipoCliente, nome, email, telefone, cpf, idade, endereco } =
       await request.json();
 
-    if (!nome || !email) {
+    if (!nome || !email || !tipoCliente) {
       return NextResponse.json(
-        { message: "Nome e email são obrigatórios" },
+        { message: "Nome, email e tipo de cliente são obrigatórios" },
         { status: 400 }
       );
     }
 
     const cliente = await prisma.cliente.create({
       data: {
+        tipoCliente,
         pessoa: {
           create: {
             nome,
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
             telefone,
             cpf,
             idade,
-            endereco,
+            endereco: endereco ? { create: endereco } : undefined,
           },
         },
       },
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(cliente, { status: 201 });
   } catch (error: any) {
-    console.error("Erro ao criar cliente:", error);
+    console.log("Erro ao criar cliente:", error);
 
     if (error.code === "P2002") {
       return NextResponse.json(
@@ -39,9 +40,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(
-      { message: "Erro interno do servidor" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error }, { status: 500 });
+  }
+}
+
+export async function GET() {
+  try {
+    const clientes = await prisma.cliente.findMany({
+      orderBy: { updatedAt: "desc" },
+    });
+
+    return NextResponse.json(clientes);
+  } catch (error) {
+    console.error("Erro ao buscar clientes:", error);
+    return NextResponse.json({ message: "Erro interno" }, { status: 500 });
   }
 }
