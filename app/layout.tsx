@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Red_Hat_Display } from "next/font/google";
 import "./globals.css";
+import HeaderDefault from "@/components/molecules/HeaderDefault";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Importa Red Hat Display como variável
+const redHatDisplay = Red_Hat_Display({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-red-hat-display",
+  display: "swap",
+  weight: ["400", "500", "700"],
 });
 
 export const metadata: Metadata = {
@@ -25,8 +25,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`
+          ${redHatDisplay.variable}
+          antialiased
+        `}
       >
+        <HeaderDefault></HeaderDefault>
         {children}
       </body>
     </html>
