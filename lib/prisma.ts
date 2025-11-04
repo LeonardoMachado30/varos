@@ -1,11 +1,12 @@
+// src/lib/prisma.ts
 import { PrismaClient } from "@prisma/client";
 
-// Configuração específica para Supabase
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
+  prisma?: PrismaClient;
 };
 
-const prisma =
+// Evita múltiplas instâncias durante hot reload (local)
+export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     datasources: {
@@ -15,25 +16,13 @@ const prisma =
     },
     log:
       process.env.NODE_ENV === "development"
-        ? ["query", "error", "warn", "info"]
+        ? ["query", "warn", "error"]
         : ["error"],
-
-    // Configurações específicas para Supabase
-    transactionOptions: {
-      maxWait: 5000, // Tempo máximo para aguardar uma transação (5s)
-      timeout: 10000, // Timeout da transação (10s)
-      isolationLevel: "ReadCommitted", // Nível de isolamento recomendado para Supabase
-    },
   });
 
-// Previne múltiplas instâncias do Prisma Client em desenvolvimento
+// Armazena globalmente em dev (mas não em produção)
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
-
-// Graceful shutdown
-process.on("beforeExit", async () => {
-  await prisma.$disconnect();
-});
 
 export default prisma;

@@ -49,7 +49,7 @@ export default function Table({
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={`py-4 px-4 font-semibold text-sm uppercase tracking-wide border-b border-[#222729] ${
+                className={`py-8 px-4 font-semibold text-sm uppercase tracking-wide border-b border-[#222729] ${
                   column.className || ""
                 }`}
               >
@@ -64,7 +64,7 @@ export default function Table({
               <tr
                 key={index}
                 tabIndex={0}
-                className="bg-[#131516] border-b border-[#222729] cursor-pointer hover:bg-[#18191b] transition-colors"
+                className="bg-[#131516] border-b border-[#222729] cursor-pointer hover:bg-[#18191b] transition-colors "
                 onClick={(e) => handleRowClick(row, index, e)}
               >
                 {columns.map((col) => {
@@ -83,7 +83,7 @@ export default function Table({
                   return (
                     <td
                       key={col.key}
-                      className="py-3 px-4 text-sm text-[#B0B7BE]"
+                      className="py-8 px-4 text-sm text-[#B0B7BE]"
                     >
                       {displayValue ?? "-"}
                     </td>
