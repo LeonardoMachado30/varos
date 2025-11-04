@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,50 +8,37 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum TipoUsuario {
-  CONSULTOR
-  CLIENTE
-}
-
 model Pessoa {
   id             String      @id @default(uuid(7))
-  tipoUsuario    TipoUsuario @default(CONSULTOR)
   nome           String
-  cpf            String?
+  cpf            String?     @unique
   dataNascimento DateTime?
-  telefone       String?
-  email          String?
-  idade          Int?
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
-
-  cliente   Cliente?
-  consultor Consultor?
-  endereco  Endereco?
-
-  @@unique([cpf])
+  email          String?
+  telefone       String?
+  idade          Int?
+  tipoUsuario    TipoUsuario @default(CONSULTOR)
+  cliente        Cliente?
+  consultor      Consultor?
+  endereco       Endereco?
 }
 
 model Consultor {
-  id String @id @default(uuid(7))
-
-  pessoa   Pessoa @relation(fields: [pessoaId], references: [id])
-  pessoaId String @unique
-
-  clientes Cliente[]
+  id       String   @id @default(uuid(7))
+  pessoaId String   @unique
+  clientes Cliente?
+  pessoa   Pessoa   @relation(fields: [pessoaId], references: [id])
 }
 
 model Cliente {
-  id String @id @default(uuid(7))
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  pessoa   Pessoa @relation(fields: [pessoaId], references: [id])
-  pessoaId String @unique
-
-  consultor   Consultor? @relation(fields: [consultorId], references: [id])
+  id          String     @id @default(uuid(7))
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  pessoaId    String     @unique
   consultorId String?    @unique
+  consultor   Consultor? @relation(fields: [consultorId], references: [id])
+  pessoa      Pessoa     @relation(fields: [pessoaId], references: [id])
 
   @@index([pessoaId])
 }
@@ -73,9 +54,13 @@ model Endereco {
   complemento String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  pessoa   Pessoa? @relation(fields: [pessoaId], references: [id])
-  pessoaId String? @unique
+  pessoaId    String?  @unique
+  pessoa      Pessoa?  @relation(fields: [pessoaId], references: [id])
 
   @@index([pessoaId])
+}
+
+enum TipoUsuario {
+  CONSULTOR
+  CLIENTE
 }

@@ -11,6 +11,7 @@ export async function POST(request: NextRequest) {
 
     const {
       pessoa: { tipoUsuario, nome, email, telefone, cpf, idade, endereco },
+      clientesId,
     } = validatedData;
 
     if (await prisma.pessoa.findFirst({ where: { cpf } })) {
@@ -35,7 +36,26 @@ export async function POST(request: NextRequest) {
       delete enderecoNew.endereco;
     }
 
-    const cliente = await prisma.cliente.create({
+    if (tipoUsuario === "CLIENTE") {
+      const cliente = await prisma.cliente.create({
+        data: {
+          pessoa: {
+            create: {
+              tipoUsuario,
+              nome,
+              email,
+              telefone,
+              cpf,
+              idade,
+              endereco: enderecoNew ? { create: enderecoNew } : undefined,
+            },
+          },
+        },
+      });
+      return NextResponse.json(cliente, { status: 201 });
+    }
+
+    const consultor = await prisma.consultor.create({
       data: {
         pessoa: {
           create: {
@@ -48,10 +68,13 @@ export async function POST(request: NextRequest) {
             endereco: enderecoNew ? { create: enderecoNew } : undefined,
           },
         },
+        clientes:
+          clientesId && clientesId.length
+            ? { connect: clientesId.map((id: string) => ({ id })) }
+            : undefined,
       },
     });
-
-    return NextResponse.json(cliente, { status: 201 });
+    return NextResponse.json(consultor, { status: 201 });
   } catch (error: any) {
     const errors = JSON.parse(error.message);
 
@@ -69,7 +92,7 @@ export async function POST(request: NextRequest) {
     if (error.code === "P2002") {
       return NextResponse.json({ message: error }, { status: 409 });
     }
-
+    console.log(error);
     return NextResponse.json(
       { message: "Erro interno no servidor" },
       { status: 500 }

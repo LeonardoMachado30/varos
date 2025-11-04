@@ -5,7 +5,7 @@ import { clienteSchema } from "./cliente.schema";
 export const consultorSchema = z.object({
   id: z.uuid().optional(),
   pessoa: pessoaSchema,
-  clientes: z.array(clienteSchema).optional(),
+  clientesId: z.array(z.uuid()).optional(),
 });
 
 export type ConsultorInput = z.infer<typeof consultorSchema>;
