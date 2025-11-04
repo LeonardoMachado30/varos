@@ -49,7 +49,7 @@ export default function Cadastro() {
     setErrorSubmit(null);
     setLoading(true);
     try {
-      const response = await api.post(`/api/clientes`, data);
+      const response = await api.post(`/clientes`, data);
 
       await router.push("/dashboard");
     } catch (error: any) {
