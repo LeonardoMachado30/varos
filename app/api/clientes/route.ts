@@ -53,11 +53,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(cliente, { status: 201 });
   } catch (error: any) {
-    console.log("Erro ao criar cliente:", error);
     const errors = JSON.parse(error.message);
 
-    console.log(errors[0].message);
-    // Tratamento específico para erros do Zod
     if (error instanceof ZodError) {
       return NextResponse.json(
         {

@@ -1,68 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-// Cria um novo consultor
-export async function POST(request: NextRequest) {
-  try {
-    const { nome, email, telefone, cpf, idade, endereco } =
-      await request.json();
-
-    if (!nome || !email || !cpf) {
-      return NextResponse.json(
-        { message: "Nome, email e CPF são obrigatórios" },
-        { status: 400 }
-      );
-    }
-
-    // Cria a pessoa e depois o consultor relacionado
-    const consultor = await prisma.consultor.create({
-      data: {
-        pessoa: {
-          create: {
-            nome,
-            email,
-            telefone,
-            cpf,
-            idade,
-            endereco: endereco ? { create: endereco } : undefined,
-          },
-        },
-      },
-      include: {
-        pessoa: {
-          include: {
-            endereco: true,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json(consultor, { status: 201 });
-  } catch (error: any) {
-    console.error("Erro ao criar consultor:", error);
-    if (error.code === "P2002") {
-      return NextResponse.json(
-        { message: "E-mail ou CPF já cadastrado" },
-        { status: 409 }
-      );
-    }
-    return NextResponse.json(
-      { message: "Erro ao criar consultor" },
-      { status: 500 }
-    );
-  }
-}
-
-// GET consultor pelo id (via query ?id=)
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
   if (!id) {
-    throw new Error("Id do consultor é obrigatorio");
+    return NextResponse.json(
+      { message: "Id do consultor é obrigatório" },
+      { status: 400 }
+    );
   }
 
-  // Se existir consulta por id do consultor
   try {
     const consultor = await prisma.consultor.findUnique({
       where: { id },
@@ -83,7 +32,11 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(consultor);
+    // if (consultor.pessoa && "password" in consultor.pessoa) {
+    //   delete consultor.pessoa.password;
+    // }
+
+    return NextResponse.json(consultor, { status: 200 });
   } catch (error) {
     console.error("Erro ao buscar consultor:", error);
     return NextResponse.json(

@@ -1,65 +1,143 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState } from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import HeaderDefault from "@/components/molecules/HeaderDefault";
+import { FormInput } from "@/components/atomic/input/FormInput";
+import { PrimaryButton } from "@/components/atomic/button/PrimaryButton";
+import Image from "next/image";
+import api from "@/axios";
+import { useRouter } from "next/navigation";
+
+type LoginFormInputs = {
+  email: string;
+  cpf: string;
+};
+
+export default function LoginPage() {
+  const methods = useForm<LoginFormInputs>({
+    defaultValues: { email: "", cpf: "" },
+    mode: "onChange",
+  });
+
+  const {
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+    control,
+  } = methods;
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const onSubmit = async (data: LoginFormInputs) => {
+    setLoading(true);
+    setErrorMsg(null);
+    clearErrors();
+
+    if (!data.email || !data.cpf) {
+      setError("email", {
+        type: "manual",
+        message: "Preencha todos os campos.",
+      });
+      setError("cpf", {
+        type: "manual",
+        message: "Preencha todos os campos.",
+      });
+      setErrorMsg("Preencha todos os campos.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      // Aqui, response.data deve ser { status: 200 }
+      const response = await api.post("/api/consultor/login", data);
+
+      // Use só status para decidir se navega
+      if (response.data.status === 200) {
+        const { token } = response.data;
+
+        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        router.push("/dashboard");
+      } else {
+        setErrorMsg("Falha ao fazer login. Verifique suas credenciais.");
+      }
+    } catch (err: any) {
+      setErrorMsg(
+        err?.response?.data?.message
+          ? String(err.response.data.message)
+          : "Erro ao fazer login."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen flex flex-col bg-[#131313] font-sans">
+      <div className="flex flex-1 items-center justify-center">
+        <div className="bg-[#131516] border-2 border-[#222729] shadow-md rounded-2xl min-w-[340px] w-full max-w-sm py-10 px-8 flex flex-col items-center justify-center">
+          <Image src="/logo.svg" width={200} height={40} alt="logo" />
+
+          <h1 className="text-white text-md font-bold my-10 tracking-tight">
+            Acesse sua conta
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+
+          <FormProvider {...methods}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="w-full flex flex-col gap-5"
+              autoComplete="off"
+              noValidate
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <FormInput
+                name="email"
+                label="E-mail"
+                orientation="vertical"
+                placeholder="Digite seu e-mail"
+                control={control}
+                type="email"
+                inputProps={{
+                  id: "email",
+                  autoComplete: "username",
+                  disabled: loading,
+                }}
+              />
+              <FormInput
+                name="cpf"
+                label="CPF"
+                orientation="vertical"
+                placeholder="Digite sua senha"
+                control={control}
+                type="password"
+                inputProps={{
+                  id: "cpf",
+                  autoComplete: "current-password",
+                  disabled: loading,
+                }}
+              />
+              {(errorMsg || errors.email || errors.cpf) && (
+                <div className="text-red-500 text-sm font-medium px-1">
+                  {errorMsg ||
+                    errors.email?.message?.toString() ||
+                    errors.cpf?.message?.toString()}
+                </div>
+              )}
+              <PrimaryButton
+                type="submit"
+                color="secondary"
+                size="lg"
+                loading={loading}
+                className="mt-2 w-full rounded-full font-semibold"
+                disabled={loading}
+              >
+                {loading ? "Entrando..." : "Entrar"}
+              </PrimaryButton>
+            </form>
+          </FormProvider>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

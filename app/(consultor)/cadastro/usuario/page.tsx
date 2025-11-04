@@ -25,7 +25,6 @@ export default function Cadastro() {
   const [loading, setLoading] = useState(false);
   const [errorSubmit, setErrorSubmit] = useState(null);
 
-  // Mocked data to represent the properties/objects expected for submit
   const methods = useForm({
     resolver: zodResolver(consultorSchema),
     mode: "onChange",
@@ -44,21 +43,7 @@ export default function Cadastro() {
           complemento: "Apto 23",
         },
       },
-      // clientes: ["cliente1", "cliente2"]
     },
-  });
-
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods;
-
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
-  handleSubmit((params) => {
-    console.log(params);
   });
 
   const onSubmit = async (data: any) => {
@@ -67,7 +52,6 @@ export default function Cadastro() {
     try {
       const response = await api.post(`/api/clientes`, data);
 
-      console.log(response);
       await router.push("/dashboard");
     } catch (error: any) {
       setErrorSubmit(error?.response?.data?.message ?? "Erro ao cadastrar");

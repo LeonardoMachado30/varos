@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.18.0",
     "axios": "^1.13.1",
+    "bcryptjs": "^3.0.3",
+    "jsonwebtoken": "^9.0.2",
     "next": "16.0.1",
     "react": "19.2.0",
     "react-dom": "19.2.0",

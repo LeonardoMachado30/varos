@@ -14,7 +14,6 @@ export const GET = async (
 
     return NextResponse.json(cliente);
   } catch (error) {
-    console.log("Erro ao buscar cliente:", error);
     return NextResponse.json({ message: error }, { status: 500 });
   }
 };
