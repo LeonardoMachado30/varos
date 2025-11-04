@@ -25,10 +25,10 @@ model Pessoa {
 }
 
 model Consultor {
-  id       String   @id @default(uuid(7))
-  pessoaId String   @unique
-  clientes Cliente?
-  pessoa   Pessoa   @relation(fields: [pessoaId], references: [id])
+  id       String    @id @default(uuid(7))
+  pessoaId String    @unique
+  clientes Cliente[]
+  pessoa   Pessoa    @relation(fields: [pessoaId], references: [id])
 }
 
 model Cliente {
