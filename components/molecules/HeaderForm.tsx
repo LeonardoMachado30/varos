@@ -17,7 +17,6 @@ export default function HeaderForm<T extends Record<string, any> = any>({
   formProps,
   onSubmit,
 }: HeaderFormProps<T>) {
-  // Se não receber 'form', cria localmente
   const methods = form ?? useForm<T>(formProps);
 
   return (

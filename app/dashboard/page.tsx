@@ -24,7 +24,7 @@ export default async function Dashboard({ searchParams }: Props) {
       filters = {};
     }
   }
-  const clientes = await getClientes({ search: filters, page });
+  const clientesResponse = await getClientes({ search: filters, page });
 
   const columns = [
     { label: "nome", key: "nome" },
@@ -68,12 +68,22 @@ export default async function Dashboard({ searchParams }: Props) {
         </div>
       </div>
 
-      {clientes.length === 0 ? (
+      {clientesResponse.data.length === 0 ? (
         <div className="text-center py-6 text-gray-500">
           Nenhum cliente encontrado.
         </div>
       ) : (
-        <Table data={clientes} columns={columns} hrefBase="/cliente" />
+        <Table
+          data={clientesResponse.data}
+          columns={columns}
+          hrefBase="/cliente"
+          pagination={{
+            page: clientesResponse.page,
+            perPage: clientesResponse.perPage,
+            totalRegistros: clientesResponse.totalRegistros,
+            totalPaginas: clientesResponse.totalPaginas,
+          }}
+        />
       )}
     </div>
   );

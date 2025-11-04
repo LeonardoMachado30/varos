@@ -48,10 +48,8 @@ export function FormInput<T extends FieldValues>({
     ref: any;
   }) => {
     const handleChange = (newValue: any) => {
-      // Atualiza react-hook-form (se existir)
       field?.onChange?.(newValue);
 
-      // Chama o onChange customizado
       if (onChange) {
         if (maskProps?.mask) {
           onChange(newValue);
@@ -124,14 +122,12 @@ export function FormInput<T extends FieldValues>({
             }}
           />
         )}
-        {/* Mensagem de erro flutuante em formato de balão */}
         <ErrorMessage message={errorMessage ?? null} />
       </div>
     </Container>
   );
 }
 
-// Input com/sem máscara
 const InputElement = React.forwardRef<HTMLInputElement, any>(
   ({ maskProps, onChange, onKeyDown, ...props }, ref) => {
     if (maskProps?.mask) {

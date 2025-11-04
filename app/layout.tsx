@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Red_Hat_Display } from "next/font/google";
 import "./globals.css";
 
-// Importa Red Hat Display como variável
 const redHatDisplay = Red_Hat_Display({
   subsets: ["latin"],
   variable: "--font-red-hat-display",

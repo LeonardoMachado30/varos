@@ -15,8 +15,8 @@ export async function getClientes({
   search?: Search;
   page?: number;
 }) {
-  console.log(search);
-  const take = 10;
+  const perPage = 5;
+  const take = perPage;
   const skip = (page - 1) * take;
 
   try {
@@ -35,6 +35,14 @@ export async function getClientes({
         email: { contains: search.email, mode: "insensitive" },
       };
     }
+
+    // Conta total de registros para paginação
+    const totalRegistros = await prisma.cliente.count({
+      where,
+    });
+
+    // Calcula o total de páginas com base no total de registros e itens por página
+    const totalPaginas = Math.ceil(totalRegistros / perPage);
 
     const data = await prisma.cliente.findMany({
       where,
@@ -67,9 +75,21 @@ export async function getClientes({
       updatedAt: c.pessoa.updatedAt ?? "-",
     }));
 
-    return clientes;
+    return {
+      data: clientes,
+      page,
+      perPage,
+      totalRegistros,
+      totalPaginas,
+    };
   } catch (error) {
     console.error("Erro ao buscar clientes:", error);
-    return [];
+    return {
+      data: [],
+      page,
+      perPage,
+      totalRegistros: 0,
+      totalPaginas: 0,
+    };
   }
 }

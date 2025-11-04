@@ -1,6 +1,5 @@
 "use client";
 
-// Mensagem de erro em formato de balão flutuante
 export const ErrorMessage = ({
   message,
   top,

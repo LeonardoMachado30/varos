@@ -5,7 +5,6 @@ const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
 };
 
-// Evita múltiplas instâncias durante hot reload (local)
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
@@ -20,7 +19,6 @@ export const prisma =
         : ["error"],
   });
 
-// Armazena globalmente em dev (mas não em produção)
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }

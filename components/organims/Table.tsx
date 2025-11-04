@@ -10,15 +10,23 @@ interface Column {
   className?: string;
 }
 
+interface PaginationProps {
+  page: number;
+  perPage: number;
+  totalRegistros: number;
+  totalPaginas: number;
+}
+
 interface TableProps {
   data?: any[];
   columns: Column[];
-  hrefBase?: string; // 👈 Novo: navegação automática por ID
+  hrefBase?: string;
   onRowClick?: (
     row: any,
     index: number,
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
   ) => void;
+  pagination?: PaginationProps;
 }
 
 export default function Table({
@@ -26,6 +34,7 @@ export default function Table({
   columns,
   hrefBase,
   onRowClick,
+  pagination,
 }: TableProps) {
   const router = useRouter();
 
@@ -39,6 +48,50 @@ export default function Table({
     } else if (hrefBase) {
       router.push(`${hrefBase}/${row.id}`);
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("page", String(newPage));
+    router.push(`?${params.toString()}`);
+  };
+
+  const renderPagination = () => {
+    if (!pagination) return null;
+    const { page, totalPaginas } = pagination;
+
+    const prevDisabled = page <= 1;
+    const nextDisabled = page >= totalPaginas;
+
+    return (
+      <div className="flex items-center justify-between mt-6">
+        <button
+          onClick={() => handlePageChange(page - 1)}
+          disabled={prevDisabled}
+          className={`rounded px-3 py-2 text-sm font-semibold border ${
+            prevDisabled
+              ? "text-gray-400 border-gray-700 cursor-not-allowed"
+              : "text-white border-[#222729] hover:bg-[#18191b]"
+          }`}
+        >
+          Anterior
+        </button>
+        <span className="text-[#B0B7BE] text-sm">
+          Página {page} de {totalPaginas}
+        </span>
+        <button
+          onClick={() => handlePageChange(page + 1)}
+          disabled={nextDisabled}
+          className={`rounded px-3 py-2 text-sm font-semibold border ${
+            nextDisabled
+              ? "text-gray-400 border-gray-700 cursor-not-allowed"
+              : "text-white border-[#222729] hover:bg-[#18191b]"
+          }`}
+        >
+          Próxima
+        </button>
+      </div>
+    );
   };
 
   return (
@@ -103,6 +156,8 @@ export default function Table({
           )}
         </tbody>
       </table>
+      {/* Controles de paginação */}
+      {renderPagination()}
     </div>
   );
 }

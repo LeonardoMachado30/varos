@@ -33,20 +33,18 @@ export async function POST(request: Request) {
       { expiresIn: "2d" }
     );
 
-    // cria resposta
     const response = NextResponse.json({
       status: 200,
       token,
       message: "Login realizado com sucesso",
     });
 
-    // define cookie httpOnly
     response.cookies.set("access-token", token, {
       path: "/",
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 2, // 2 dias
+      maxAge: 60 * 60 * 24 * 2,
     });
 
     return response;

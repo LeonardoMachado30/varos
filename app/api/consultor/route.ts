@@ -32,10 +32,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // if (consultor.pessoa && "password" in consultor.pessoa) {
-    //   delete consultor.pessoa.password;
-    // }
-
     return NextResponse.json(consultor, { status: 200 });
   } catch (error) {
     console.error("Erro ao buscar consultor:", error);

@@ -15,7 +15,6 @@ export type CommonSelectProps<T extends FieldValues> = {
   label?: React.ReactNode | string;
   placeholder?: string;
   orientation?: "horizontal" | "vertical";
-  // Para controlar manualmente (sem react-hook-form)
   value?: string;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
   required?: boolean;

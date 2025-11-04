@@ -18,7 +18,7 @@ export function FormSelect<T extends FieldValues>({
   onChange,
   required,
   children,
-  onMenuScrollToBottom, // <- nova prop
+  onMenuScrollToBottom,
 }: FormSelectProps<T> & {
   onMenuScrollToBottom?: (e: React.UIEvent<HTMLDivElement>) => void;
 }) {
@@ -39,7 +39,6 @@ export function FormSelect<T extends FieldValues>({
     .filter(Boolean)
     .join(" ");
 
-  // Wrapper para adicionar onMenuScrollToBottom se fornecido
   const SelectWrapper: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) =>
@@ -105,7 +104,6 @@ export function FormSelect<T extends FieldValues>({
     </SelectWrapper>
   );
 
-  // Fallback para uso sem react-hook-form (select controlado manualmente)
   return (
     <Container
       id={id}

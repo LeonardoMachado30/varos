@@ -5,7 +5,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// Interceptador de resposta para mostrar mensagem de sucesso ou erro (exceto para GET)
 api.interceptors.response.use(
   (response) => {
     return response;
