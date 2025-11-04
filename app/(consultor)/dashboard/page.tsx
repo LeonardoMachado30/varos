@@ -1,14 +1,30 @@
 // src/app/consultor/dashboard/clientes/page.tsx
 import Table from "@/components/organims/Table";
 import { getClientes } from "./actions";
-import { FormInput } from "@/components/atomic/input/FormInput";
 import { SearchGroup } from "@/components/organims/group/SearchGroup";
 import { PrimaryButton } from "@/components/atomic/button/PrimaryButton";
 import Image from "next/image";
 import iconAdd from "@/components/atomic/icon/add.svg";
+import TotalClientes from "@/components/molecules/metrics/TotalClientes";
 
-export default async function Dashboard() {
-  const clientes = await getClientes();
+interface Props {
+  searchParams: Promise<{ search?: string; page?: string }>;
+}
+
+export default async function Dashboard({ searchParams }: Props) {
+  const resolvedParams = await searchParams;
+
+  const page = Number(resolvedParams?.page || 1);
+  let filters = {};
+
+  if (resolvedParams?.search) {
+    try {
+      filters = JSON.parse(resolvedParams.search);
+    } catch {
+      filters = {};
+    }
+  }
+  const clientes = await getClientes({ search: filters, page });
 
   const columns = [
     { label: "nome", key: "nome" },
@@ -29,17 +45,12 @@ export default async function Dashboard() {
       <h1 className="text-4xl font-bold mb-6">Dashboard</h1>
 
       <div className="flex flex-row justify-between gap-2">
-        <div className="flex flex-col gap-2 bg-[#131516] text-[#B0B7BE] border-[#222729] border p-4 max-w-[212px] max-h-[137px] h-full w-full">
-          <p>Total de clientes</p>
-          <p className="text-4xl">128</p>
-          <p>nas últimos 7 dias</p>
-        </div>
+        <TotalClientes />
 
-        <div className="flex justify-end items-end flex-col gap-2">
+        <div className="flex justify-end items-end flex-col gap-2  mb-6">
           <PrimaryButton
             href="/cadastro/usuario"
             className="max-w-[171px] p-4 rounded-lg"
-            withIcon
           >
             <span className="flex items-center gap-2">
               Criar usuário

@@ -1,15 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
 
 const SECRET = process.env.JWT_SECRET!;
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await request.json();
-
-    const { email, cpf } = body;
+    const { email, cpf } = await request.json();
 
     if (!email || !cpf) {
       return NextResponse.json(
@@ -17,12 +14,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    const consultor = await prisma.pessoa.findFirst({
-      where: {
-        email,
-        cpf,
-      },
-    });
+
+    const consultor = await prisma.pessoa.findFirst({ where: { email, cpf } });
     if (!consultor) {
       return NextResponse.json(
         { message: "Consultor não encontrado" },
@@ -33,7 +26,6 @@ export async function POST(request: NextRequest) {
     const token = jwt.sign(
       {
         consultorId: consultor.id,
-        pessoaId: consultor.id,
         email: consultor.email,
         tipoUsuario: consultor.tipoUsuario,
       },
@@ -41,25 +33,28 @@ export async function POST(request: NextRequest) {
       { expiresIn: "2d" }
     );
 
-    const cookie = await cookies();
-
-    cookie.set("access-token", token, {
-      path: "/",
-      domain: "localhost",
-      maxAge: 3600,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax", // Or "strict" depending on your needs
-    });
-    return NextResponse.json({
+    // cria resposta
+    const response = NextResponse.json({
       status: 200,
       token,
       message: "Login realizado com sucesso",
     });
-  } catch (error: any) {
+
+    // define cookie httpOnly
+    response.cookies.set("access-token", token, {
+      path: "/",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 2, // 2 dias
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Erro no login:", error);
     return NextResponse.json(
-      { message: "Erro ao criar ou autenticar consultor" },
-      { status: error.code }
+      { message: "Erro interno do servidor" },
+      { status: 500 }
     );
   }
 }

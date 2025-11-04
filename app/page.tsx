@@ -51,15 +51,18 @@ export default function LoginPage() {
     }
 
     try {
-      // Aqui, response.data deve ser { status: 200 }
-      const response = await api.post("/api/consultor/login", data);
+      const response = await api.post("/api/consultor/login", data, {
+        withCredentials: true,
+      });
 
-      // Use só status para decidir se navega
       if (response.data.status === 200) {
         const { token } = response.data;
 
         api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        router.push("/dashboard");
+
+        localStorage.setItem("token", token);
+
+        await router.push("/dashboard");
       } else {
         setErrorMsg("Falha ao fazer login. Verifique suas credenciais.");
       }
