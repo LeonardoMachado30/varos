@@ -5,12 +5,11 @@ import { FormInput } from "@/components/atomic/input/FormInput";
 import { FormSelect } from "@/components/atomic/input/FormSelect";
 import { Tabs } from "@/components/molecules/Tabs";
 import HeaderForm from "@/components/molecules/HeaderForm";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { consultorSchema } from "@/utils/zod/schemas/consultor.schema";
 import api from "@/axios";
 import { useRouter } from "next/navigation";
-import { ErrorMessage } from "@/components/atomic/input/ErrorMessage";
 
 type FormConsultor = {
   nome: string;

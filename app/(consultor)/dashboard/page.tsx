@@ -73,7 +73,7 @@ export default async function Dashboard({ searchParams }: Props) {
           Nenhum cliente encontrado.
         </div>
       ) : (
-        <Table data={clientes} columns={columns} />
+        <Table data={clientes} columns={columns} hrefBase="/cliente" />
       )}
     </div>
   );
