@@ -15,8 +15,15 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+
+enum TipoUsuario {
+    CONSULTOR
+    CLIENTE
+}
+
 model Pessoa {
     id             String       @id @default(uuid(7))
+    tipoUsuario    TipoUsuario  @default(CONSULTOR)
     nome           String
     cpf            String?
     dataNascimento DateTime?
@@ -43,13 +50,8 @@ model Consultor {
 }
 
 
-enum TipoClinete {
-    CONSULTOR
-}
-
 model Cliente {
     id String @id @default(uuid(7))
-    tipoCliente TipoClinete
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

@@ -1,43 +1,53 @@
 // src/components/Table.tsx
-import React from "react";
-
-export default function Table({ data }: { data?: any[] }) {
-  const rows = data || [
-    { id: 1, nome: "Flávio Pádua", email: "flavio@teste.com", status: "Ativo" },
-    { id: 2, nome: "João Silva", email: "joao@teste.com", status: "Inativo" },
-  ];
+export default function Table({
+  data,
+  columns,
+}: {
+  data?: any[];
+  columns: any[];
+}) {
+  const _columns = columns || [];
 
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full border-collapse">
         <thead>
-          <tr className="bg-[var(--primary)] text-white text-left">
-            <th className="py-3 px-4 rounded-tl-lg">Nome</th>
-            <th className="py-3 px-4">Email</th>
-            <th className="py-3 px-4 rounded-tr-lg">Status</th>
+          <tr className="bg-[#131313] text-white text-left border-2 border-[#222729]">
+            {_columns.map((column) => (
+              <th
+                key={column.key}
+                className={`py-10 px-4 rounded-tl-lg ${column.className}`}
+              >
+                {column.label}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((item) => (
-            <tr
-              key={item.id}
-              className="border-b border-[var(--border-color)] hover:bg-[var(--bg-light)] transition"
-            >
-              <td className="py-3 px-4">{item.nome}</td>
-              <td className="py-3 px-4">{item.email}</td>
-              <td className="py-3 px-4">
-                <span
-                  className={`px-2 py-1 rounded text-sm font-medium ${
-                    item.status === "Ativo"
-                      ? "bg-green-100 text-[var(--success)]"
-                      : "bg-red-100 text-[var(--error)]"
-                  }`}
-                >
-                  {item.status}
-                </span>
-              </td>
-            </tr>
-          ))}
+          {data &&
+            data.map((row, index) => (
+              <tr
+                key={index}
+                className="bg-[#131516] transition border-2 border-[#222729]"
+              >
+                {_columns.map((col) => (
+                  <td className="py-10 px-4" key={col.key}>
+                    {(() => {
+                      const value = (row as any)[col.key];
+                      if (value instanceof Date) {
+                        const day = value.getDate().toString().padStart(2, "0");
+                        const month = (value.getMonth() + 1)
+                          .toString()
+                          .padStart(2, "0");
+                        const year = value.getFullYear();
+                        return `${day}/${month}/${year}`;
+                      }
+                      return value ?? "-";
+                    })()}
+                  </td>
+                ))}
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

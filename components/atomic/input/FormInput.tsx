@@ -1,3 +1,5 @@
+"use client";
+
 // src/components/input/FormInput.tsx
 import { FormInputProps } from "@/types/formInput.type";
 import { getError } from "@/utils/getError";
@@ -169,7 +171,7 @@ function buildInputClasses(
   customClassName?: string
 ) {
   const base =
-    "shadow appearance-none border-[1px] rounded-lg py-2 px-3 text-gray-400 w-full leading-tight focus:outline-none focus:shadow-outline transition-all duration-200 disabled:opacity-90 bg-gray-800";
+    "shadow appearance-none border-[1px] rounded-lg py-2 px-3 text-gray-400 w-full leading-tight focus:outline-none focus:shadow-outline transition-all duration-200 disabled:opacity-90 bg-[#F2F4F80A]";
   const errorClass = errorMessage ? "border-red-500" : "border-gray-600";
   return [base, errorClass, customClassName].filter(Boolean).join(" ");
 }
