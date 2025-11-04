@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { consultorSchema } from "@/utils/zod/schemas/consultor.schema";
 import { ZodError } from "zod";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
   try {
@@ -52,6 +53,7 @@ export async function POST(request: NextRequest) {
           },
         },
       });
+      await revalidatePath("/consultor/dashboard");
       return NextResponse.json(cliente, { status: 201 });
     }
 
@@ -74,6 +76,7 @@ export async function POST(request: NextRequest) {
             : undefined,
       },
     });
+    await revalidatePath("/consultor/dashboard");
     return NextResponse.json(consultor, { status: 201 });
   } catch (error: any) {
     const errors = JSON.parse(error.message);
