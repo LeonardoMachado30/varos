@@ -51,7 +51,7 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await api.post("/api/consultor/login", data, {
+      const response = await api.post("/consultor/login", data, {
         withCredentials: true,
       });
 
