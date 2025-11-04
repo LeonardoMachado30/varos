@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-
-
 :root {
   --primary-c-black: #131313; /* azul principal do dashboard */
   --secondary: #1e293b; /* azul escuro / textos */
@@ -12,6 +10,7 @@
   --success: #22c55e;
   --error: #ef4444;
 }
+
 body {
   background-color: var(--primary-c-black);
   color: white;

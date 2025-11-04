@@ -1,29 +1,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { consultorSchema } from "@/utils/zod/schemas/consultor.schema";
+import { ZodError } from "zod";
 
 export async function POST(request: NextRequest) {
   try {
-    const { tipoCliente, nome, email, telefone, cpf, idade, endereco } =
-      await request.json();
+    const body = await request.json();
 
-    if (!nome || !email || !tipoCliente) {
-      return NextResponse.json(
-        { message: "Nome, email e tipo de cliente são obrigatórios" },
-        { status: 400 }
-      );
+    const validatedData = consultorSchema.parse(body);
+
+    const {
+      pessoa: { tipoUsuario, nome, email, telefone, cpf, idade, endereco },
+    } = validatedData;
+
+    if (await prisma.pessoa.findFirst({ where: { cpf } })) {
+      // Agora lança um erro do Zod caso o CPF já exista
+      throw new ZodError([
+        {
+          code: "custom",
+          message: "CPF já cadastrado",
+          path: ["pessoa.cpf"],
+        },
+      ]);
+    }
+
+    const enderecoNew = endereco
+      ? {
+          ...endereco,
+          rua: endereco.endereco ?? null,
+        }
+      : null;
+
+    if (enderecoNew) {
+      delete enderecoNew.endereco;
     }
 
     const cliente = await prisma.cliente.create({
       data: {
-        tipoCliente,
         pessoa: {
           create: {
+            tipoUsuario,
             nome,
             email,
             telefone,
             cpf,
             idade,
-            endereco: endereco ? { create: endereco } : undefined,
+            endereco: enderecoNew ? { create: enderecoNew } : undefined,
           },
         },
       },
@@ -32,15 +54,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(cliente, { status: 201 });
   } catch (error: any) {
     console.log("Erro ao criar cliente:", error);
+    const errors = JSON.parse(error.message);
 
-    if (error.code === "P2002") {
+    console.log(errors[0].message);
+    // Tratamento específico para erros do Zod
+    if (error instanceof ZodError) {
       return NextResponse.json(
-        { message: "Email já cadastrado" },
-        { status: 409 }
+        {
+          message: errors[0].message ?? "Ops, algo deu errado, tente novamente",
+          errors: error.issues,
+        },
+        { status: 400 }
       );
     }
 
-    return NextResponse.json({ message: error }, { status: 500 });
+    // Erro de unicidade do Prisma
+    if (error.code === "P2002") {
+      return NextResponse.json({ message: error }, { status: 409 });
+    }
+
+    return NextResponse.json(
+      { message: "Erro interno no servidor" },
+      { status: 500 }
+    );
   }
 }
 

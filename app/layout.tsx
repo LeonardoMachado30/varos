@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import { Red_Hat_Display } from "next/font/google";
 import "./globals.css";
-import HeaderDefault from "@/components/molecules/HeaderDefault";
 
 // Importa Red Hat Display como variável
 const redHatDisplay = Red_Hat_Display({
@@ -24,19 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=add_alert"
-        />
-      </head>
       <body
         className={`
           ${redHatDisplay.variable}
           antialiased
         `}
       >
-        <HeaderDefault></HeaderDefault>
         {children}
       </body>
     </html>

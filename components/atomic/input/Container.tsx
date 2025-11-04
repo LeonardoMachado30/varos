@@ -1,14 +1,21 @@
+"use client";
+
 import { ContainerProps } from "@/types/formInput.type";
 import React from "react";
 
 export const Container: React.FC<ContainerProps> = ({
   children,
   label,
+  orientation = "horizontal",
   id,
   className,
 }) => {
   return (
-    <div className={`${className || ""} flex items-center gap-2`}>
+    <div
+      className={`${className || ""} flex ${
+        orientation === "vertical" ? "flex-col" : "items-center"
+      }  gap-2`}
+    >
       {label && (
         <label
           htmlFor={id}

@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import React from "react";
 import { tv, type VariantProps } from "tailwind-variants";
@@ -8,12 +9,12 @@ const button = tv({
   variants: {
     color: {
       primary: "bg-[#1B3F1B] text-[#00F700] hover:bg-[#155c15]",
-      secondary: "bg-purple-500 text-white hover:bg-purple-600",
+      secondary: "bg-[#F2F4F80A] text-[#878D96] hover:bg-purple-600",
     },
     size: {
       sm: "text-sm px-3 py-1",
       md: "text-base px-4 py-2",
-      lg: "text-lg px-5 py-3",
+      lg: "text-lg px-8 py-3",
     },
   },
   defaultVariants: {

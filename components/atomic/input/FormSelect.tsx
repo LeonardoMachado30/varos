@@ -1,3 +1,5 @@
+"use client";
+
 // src/components/input/FormSelect.tsx
 import { FormSelectProps } from "@/types/formSelect.type";
 import { getError } from "@/utils/getError";
@@ -10,6 +12,7 @@ export function FormSelect<T extends FieldValues>({
   name,
   selectProps,
   label,
+  orientation = "horizontal",
   placeholder,
   value,
   onChange,
@@ -27,8 +30,8 @@ export function FormSelect<T extends FieldValues>({
   const id = selectProps?.id || name.toString();
 
   const baseClass =
-    "shadow appearance-none border rounded py-2 px-3 text-gray-700 w-full leading-tight focus:outline-none focus:shadow-outline border transition-all duration-200 disabled:opacity-90";
-  const errorClass = errorMessage ? "border-red-500" : "";
+    "shadow appearance-none border rounded py-2 px-3 text-gray-700 w-full leading-tight focus:outline-none focus:shadow-outline border transition-all duration-200 disabled:opacity-90 bg-[#131516] text-white";
+  const errorClass = errorMessage ? "border-red-500" : "border-[#222729]";
 
   const { classNameContainer, ...otherSelectProps } = selectProps || {};
 
@@ -104,7 +107,12 @@ export function FormSelect<T extends FieldValues>({
 
   // Fallback para uso sem react-hook-form (select controlado manualmente)
   return (
-    <Container id={id} label={label} className={classNameContainer}>
+    <Container
+      id={id}
+      label={label}
+      orientation={orientation}
+      className={classNameContainer}
+    >
       <div className="relative">
         {control ? ControlElement : SelectInput}
         <ErrorMessage message={errorMessage ?? null} />

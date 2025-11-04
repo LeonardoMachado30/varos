@@ -23,6 +23,7 @@ export function FormInput<T extends FieldValues>({
   errors: externalErrors,
   noControl = false,
   clear = false,
+  orientation = "horizontal",
 }: FormInputProps<T> & { noControl?: boolean }) {
   const formContext = useFormContext<T>();
   const control = externalControl || formContext?.control;
@@ -82,7 +83,12 @@ export function FormInput<T extends FieldValues>({
   };
 
   return (
-    <Container id={id} label={label} className={classNameContainer}>
+    <Container
+      orientation={orientation}
+      id={id}
+      label={label}
+      className={classNameContainer}
+    >
       <div className="relative">
         {control && !noControl ? (
           <Controller
@@ -159,7 +165,7 @@ const ClearButton = ({ value, onClear }: { value: any; onClear: () => void }) =>
     <button
       type="button"
       onClick={onClear}
-      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+      className="absolute right-2 top-1/2 -translate-y-1/2 hover:text-gray-600 transition-colors p-1"
       tabIndex={-1}
     >
       <span className="material-icons-outlined">close</span>
@@ -171,7 +177,7 @@ function buildInputClasses(
   customClassName?: string
 ) {
   const base =
-    "shadow appearance-none border-[1px] rounded-lg py-2 px-3 text-gray-400 w-full leading-tight focus:outline-none focus:shadow-outline transition-all duration-200 disabled:opacity-90 bg-[#F2F4F80A]";
-  const errorClass = errorMessage ? "border-red-500" : "border-gray-600";
+    "shadow appearance-none border-[1px] rounded-lg py-2 px-3 text-white w-full leading-tight focus:outline-none focus:shadow-outline transition-all duration-200 disabled:opacity-90 bg-[#131516]";
+  const errorClass = errorMessage ? "border-red-500" : "border-[#222729]";
   return [base, errorClass, customClassName].filter(Boolean).join(" ");
 }

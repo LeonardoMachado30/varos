@@ -18,6 +18,7 @@ export type CommonProps<T extends FieldValues> = {
     IMaskInputProps<any>,
     "name" | "value" | "onChange" | "onAccept" | "ref" | "inputRef"
   >;
+  orientation?: "vertical" | "horizontal";
   label?: React.ReactNode | string;
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
@@ -35,6 +36,7 @@ export type FormInputProps<T extends FieldValues> =
   | (CommonProps<T> & { control?: never; register?: never });
 
 export type ContainerProps = {
+  orientation?: "vertical" | "horizontal";
   children: React.ReactNode;
   label?: React.ReactNode | string;
   id?: string;

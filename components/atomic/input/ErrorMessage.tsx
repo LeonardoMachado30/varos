@@ -1,3 +1,5 @@
+"use client";
+
 // Mensagem de erro em formato de balão flutuante
 export const ErrorMessage = ({
   message,
@@ -8,13 +10,13 @@ export const ErrorMessage = ({
 }) =>
   message ? (
     <div
-      className="absolute left-0 right-0 flex justify-start pointer-events-none w-fit"
-      style={{ top: top ?? "40px", zIndex: 20 }}
+      className="mt-2 left-0 right-0 flex justify-start pointer-events-none w-fit"
+      style={{ top: top ?? "42px", zIndex: 20 }}
     >
       <div className="relative">
         <div
           className="
-            bg-white
+            bg-[#131516]
             text-red-500
             border-red-500
             border

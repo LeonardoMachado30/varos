@@ -1,8 +1,9 @@
+"use client";
 // src/components/input/FormTextarea.tsx
-import { getError } from '@/utils/getError';
-import React, { TextareaHTMLAttributes } from 'react';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
-import { Container } from './Container';
+import { getError } from "@/utils/getError";
+import React, { TextareaHTMLAttributes } from "react";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { Container } from "./Container";
 
 type FormTextareaProps = {
   name: string;
@@ -33,7 +34,7 @@ export const FormTextarea: React.FC<FormTextareaProps> = ({
         {...register(name)}
         placeholder={placeholder}
         className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
-          errorMessage ? 'border-red-500' : ''
+          errorMessage ? "border-red-500" : ""
         }`}
         rows={4}
         {...restTextareaProps}

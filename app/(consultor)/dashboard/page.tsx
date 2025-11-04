@@ -28,8 +28,8 @@ export default async function Dashboard() {
     <div className="max-w-[1550px] mx-auto py-10 px-4">
       <h1 className="text-4xl font-bold mb-6">Dashboard</h1>
 
-      <div className="flex flex-row justify-between ">
-        <div className="flex flex-col gap-2 bg-[#131516] text-[#B0B7BE] border-[#222729] border-[1px] p-4 max-w-[212px] max-h-[137px] h-full w-full">
+      <div className="flex flex-row justify-between gap-2">
+        <div className="flex flex-col gap-2 bg-[#131516] text-[#B0B7BE] border-[#222729] border p-4 max-w-[212px] max-h-[137px] h-full w-full">
           <p>Total de clientes</p>
           <p className="text-4xl">128</p>
           <p>nas últimos 7 dias</p>
