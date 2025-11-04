@@ -2,95 +2,89 @@
   <img alt="Varos Logo" src="./public/logo.svg" width="260" />
 </p>
 
+<!-- SUMÁRIO -->
+
+## Sumário
+
+- [Projeto Varos - Plataforma de Gerenciamento de Consultores e Clientes](#projeto-varos---plataforma-de-gerenciamento-de-consultores-e-clientes)
+  - [Resumo do Projeto](#resumo-do-projeto)
+  - [Principais Decisões](#principais-decis%C3%B5es)
+  - [Dados de Acesso para Testes](#dados-de-acesso-para-testes)
+  - [Especificações Técnicas Atendidas](#especifica%C3%A7%C3%B5es-t%C3%A9cnicas-atendidas)
+    - [Estrutura das tabelas principais:](#estrutura-das-tabelas-principais)
+  - [Organização do Código](#organiza%C3%A7%C3%A3o-do-c%C3%B3digo)
+  - [Prisma – Migrations e Studio (resumido)](#prisma--migrations-e-studio-resumido)
+  - [Como rodar localmente](#como-rodar-localmente)
+  - [Observações finais](#observa%C3%A7%C3%B5es-finais)
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 # Projeto Varos - Plataforma de Gerenciamento de Consultores e Clientes
 
-Este projeto foi desenvolvido como parte do teste técnico para vaga Full-Stack na Varos. O objetivo era criar uma aplicação completa utilizando Next.js (v16), Tailwind CSS, e Prisma ORM, aplicando as boas práticas recomendadas e empregando todos os requisitos do teste.
+Este projeto foi desenvolvido como parte do teste técnico para vaga Full-Stack na Varos, utilizando Next.js (v16), Tailwind CSS, e Prisma ORM, seguindo boas práticas e todos requisitos do teste.
 
 ## Resumo do Projeto
 
-O sistema consiste em um painel (“dashboard”) para consultores, e um módulo de gestão de usuários, permitindo o gerenciamento de consultores e clientes, incluindo cadastro, atualização e visualização dos dados, e relacionamentos entre essas entidades.
+O sistema consiste em um dashboard para consultores, além de um módulo de gestão de usuários (consultores e clientes) com cadastro, atualização e visualização de dados e relacionamentos.
 
 Principais funcionalidades:
 
-- **Dashboard do Consultor:** Exibição de clientes associados a cada consultor, com filtros e métricas.
-- **Gestão de Usuários:** Formulários para criação (upsert) e atualização de consultores e clientes, com validação completa dos campos.
-- **Relacionamento:** Cada consultor pode ter múltiplos clientes vinculados.
-- **Autenticação:** Login seguro com email e CPF, geração de JWT no backend e uso de cookies httpOnly.
-- **Arquitetura moderna:** Server Components, Suspense, Loading Skeletons, Cache e Server Actions, conforme o stack utilizado internamente pela Varos.
+- **Dashboard do Consultor:** Lista clientes do consultor, com filtros e métricas.
+- **Gestão Completa de Usuários:** Criação (upsert) e atualização de consultores e clientes, com validação.
+- **Relacionamento:** Cada consultor pode ter múltiplos clientes.
+- **Autenticação:** Login via email e CPF, JWT e cookies httpOnly.
+- **Arquitetura Moderna:** Server Components, Suspense, loading skeletons, cache e Server Actions.
 
-O deploy foi realizado na **Vercel** para o front-end (Next.js) e no **Supabase** para o banco de dados PostgreSQL, permitindo fácil acesso e validação.
+Deploy no **Vercel** (Next.js) e banco no **Supabase**.
 
 ---
 
 ## Principais Decisões
 
-- **Next.js v16:** Utilização da versão mais atual para garantir acesso a Server Components, Server Actions e demais features modernas.
-- **Tailwind CSS:** Utilizado para agilizar o desenvolvimento de UI responsiva e consistente, além de garantir facilidade em customizações.
-- **Prisma ORM:** Gerenciamento do banco de dados relacional (PostgreSQL/Supabase), com migrations versionadas na pasta `/prisma/migrations`.
-- **Validação de formulários:** Utilização do React Hook Form e Zod para validação client-side e mensagens de erro amigáveis.
-- **Autenticação JWT:** Implementada via endpoints no backend, seguindo boas práticas de segurança (cookies httpOnly, JWT).
-- **Estrutura modular:** Código organizado com separation of concerns (controle de auth, regras de negócio, componentes).
-- **Recomendações do teste:** Todo o stack e cada item solicitado (como Server Components, Suspense, loading, relações entre entidades, etc.) estão devidamente implementados e documentados no código.
+- **Next.js v16:** Suporte a Server Actions/Components e features recentes.
+- **Tailwind CSS:** Produtividade e flexibilidade visual.
+- **Prisma ORM:** Banco relacional versionado com migrations.
+- **React Hook Form + Zod:** Validação completa no frontend.
+- **JWT:** Autenticação cuidando da segurança.
+- **Estrutura modular:** Código organizado.
+- **Stack completo solicitado no teste**, usando todas as features pedidas.
 
 ---
 
 ## Dados de Acesso para Testes
 
-Consultor Padrão:
+Consultor para login:
 
 - **CPF:** 034234234
 - **E-mail:** flavio@exemplo.com
-
-Esses dados podem ser usados para acessar o sistema na tela de login.
 
 ---
 
 ## Especificações Técnicas Atendidas
 
 - **Next.js 16 + App Router + Server Components**
-- **Tailwind CSS** para estilização
-- **Prisma ORM** para modelagem, migrations e acesso ao banco
-- **Validação com React Hook Form + Zod**
-- **Dashboard com tabela, filtros e métricas**
-- **Sistema de cadastro (upsert) de usuário**
-- **Relacionamento entre consultores e clientes**
-- **Endpoints para autenticação via JWT**
-- **Deploy em Vercel e banco em Supabase**
+- **Tailwind CSS**
+- **Prisma ORM:** Modelagem, migrations e acesso ao banco
+- **React Hook Form + Zod**
+- **Dashboard completo**
+- **Cadastro e relação consultor–cliente**
+- **JWT para endpoints**
+- **Deploy em Vercel e Supabase**
 
 ### Estrutura das tabelas principais:
 
-Consultor (Pessoa):
+**Consultor (Pessoa):**
 
-- tipoUsuario
-- nome
-- telefone
-- email
-- idade
-- cpf
-- cep
-- estado
-- endereco
-- complemento
+- tipoUsuario, nome, telefone, email, idade, cpf, cep, estado, endereco, complemento
 - **Relação: lista de clientes**
 
-Cliente:
+**Cliente:**
 
-- nome
-- email
-- telefone
-- cpf
-- idade
-- endereco
-- criadoEm
-- atualizadoEm
+- nome, email, telefone, cpf, idade, endereco, criadoEm, atualizadoEm
 
 ---
 
 ## Organização do Código
-
-Principais pastas e arquivos:
 
 ```
 app/
@@ -104,14 +98,39 @@ app/
 ├── dashboard/
 └── generated/
     └── prisma/
-        ├── internal/
-        └── models/
 ├── lib/
 │   └── prisma.ts
 ├── prisma/
 └── migrations/
-    ├── ... (migrations do banco)
 ```
+
+---
+
+## Prisma – Migrations e Studio (resumido)
+
+- Para criar uma migration após mudar o schema, use:
+
+```bash
+npx prisma migrate dev --name nome_da_migrate
+```
+
+- O nome deve seguir _snake_case_ (exemplo: `adicionar_campo_idade`). Isso facilita histórico e entendimento dos propósitos de cada migration.
+
+- Para aplicar migrations em produção utilize:
+
+```bash
+npx prisma migrate deploy
+```
+
+> Este comando aplica todas as migrations pendentes. Ele é focado para ambiente de produção, pois não executa validações interativas nem resolve conflitos automaticamente.
+
+- Para explorar/editar os dados de maneira visual, execute:
+
+```bash
+npx prisma studio
+```
+
+> Acesse a interface web para consultar, inserir e editar dados no banco de forma simples.
 
 ---
 
@@ -141,12 +160,11 @@ bun dev
 
 ## Observações finais
 
-- Todo o stack/funcionalidade recomendados no teste foram utilizados.
-- Validações, relacionamento entre entidades e recursos modernos do Next.js estão aplicados.
-- Toda a lógica de autenticação e controle de acesso está devidamente protegida.
-- Deploy realizado conforme a recomendação do teste.
+- Todo stack e funcionalidades sugeridas no teste foram aplicados.
+- Stack Next.js moderno, autenticação, validações e relacionamento de entidades completos.
+- Deploy conforme recomendado.
 
-Assim que finalizado, o link do deploy e do repositório foi enviado conforme instrução ao Linkedin do recrutador.
+Assim que finalizado, link do deploy e repositório foi enviado conforme instrução ao recrutador via Linkedin.
 
 ---
 
