@@ -22,6 +22,9 @@ interface Cliente {
       numero?: string;
       cidade?: string;
       estado?: string;
+      bairro?: string;
+      complemento?: string;
+      cep?: string;
     };
   };
 }
@@ -66,17 +69,17 @@ export default function ClientePage() {
   return (
     <>
       <HeaderButtonGroup
-        type="cliente"
+        type="consultor"
         buttons={[
           {
-            label: "Editar cliente",
+            label: "Editar consultor",
             type: "button",
             color: "primary",
             size: "lg",
-            onClick: () => router.push("/usuario/cliente/" + id),
+            onClick: () => router.push("/usuario/consultor/" + id),
           },
           {
-            label: "Remover cliente",
+            label: "Remover consultor",
             type: "button",
             color: "secondary",
             size: "lg",
@@ -86,7 +89,7 @@ export default function ClientePage() {
       />
 
       <div className="max-w-xl mx-auto py-10 px-4">
-        <h1 className="text-3xl mb-4">Detalhes do Cliente</h1>
+        <h1 className="text-3xl mb-4">Detalhes do Consultor</h1>
 
         <div className="bg-[#131516] text-[#B0B7BE] border-[#222729] border p-6 rounded-lg shadow flex gap-3 flex-col">
           <p>
@@ -105,24 +108,65 @@ export default function ClientePage() {
           <p>
             <span className="font-semibold">Idade:</span> {pessoa.idade ?? "-"}
           </p>
-          <p>
-            <span className="font-semibold">Endereço:</span>{" "}
-            {pessoa.endereco
-              ? `${pessoa.endereco.rua ?? ""}, ${
-                  pessoa.endereco.numero ?? ""
-                }, ${pessoa.endereco.cidade ?? ""} - ${
-                  pessoa.endereco.estado ?? ""
-                }`
-              : "-"}
-          </p>
-          <p>
-            <span className="font-semibold">Criado em:</span>{" "}
-            {new Date(cliente.createdAt).toLocaleString("pt-BR")}
-          </p>
-          <p>
-            <span className="font-semibold">Atualizado em:</span>{" "}
-            {new Date(cliente.updatedAt).toLocaleString("pt-BR")}
-          </p>
+          <div>
+            <span className="font-semibold">Endereço:</span>
+            {pessoa.endereco ? (
+              <ul className="list-disc ml-6">
+                {pessoa.endereco.rua && (
+                  <li>
+                    <span className="font-semibold">Rua:</span>{" "}
+                    {pessoa.endereco.rua}
+                  </li>
+                )}
+                {pessoa.endereco.numero && (
+                  <li>
+                    <span className="font-semibold">Número:</span>{" "}
+                    {pessoa.endereco.numero}
+                  </li>
+                )}
+                {pessoa.endereco.bairro && (
+                  <li>
+                    <span className="font-semibold">Bairro:</span>{" "}
+                    {pessoa.endereco.bairro}
+                  </li>
+                )}
+                {pessoa.endereco.cidade && (
+                  <li>
+                    <span className="font-semibold">Cidade:</span>{" "}
+                    {pessoa.endereco.cidade}
+                  </li>
+                )}
+                {pessoa.endereco.estado && (
+                  <li>
+                    <span className="font-semibold">Estado:</span>{" "}
+                    {pessoa.endereco.estado}
+                  </li>
+                )}
+                {pessoa.endereco.cep && (
+                  <li>
+                    <span className="font-semibold">CEP:</span>{" "}
+                    {pessoa.endereco.cep}
+                  </li>
+                )}
+                {pessoa.endereco.complemento && (
+                  <li>
+                    <span className="font-semibold">Complemento:</span>{" "}
+                    {pessoa.endereco.complemento}
+                  </li>
+                )}
+                {/* Caso não haja nenhuma informação de endereço */}
+                {!pessoa.endereco.rua &&
+                  !pessoa.endereco.numero &&
+                  !pessoa.endereco.bairro &&
+                  !pessoa.endereco.cidade &&
+                  !pessoa.endereco.estado &&
+                  !pessoa.endereco.cep &&
+                  !pessoa.endereco.complemento && <li>-</li>}
+              </ul>
+            ) : (
+              "-"
+            )}
+          </div>
         </div>
       </div>
     </>

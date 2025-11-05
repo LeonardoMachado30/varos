@@ -10,7 +10,7 @@ interface Search {
   periodo?: string;
 }
 
-export function SearchGroup() {
+export function SearchGroup({ type = "consultor" }: { type?: string }) {
   const [filters, setFilters] = useState<Search>({});
   const [loadingField, setLoadingField] = useState<keyof Search | null>(null);
 
@@ -73,7 +73,7 @@ export function SearchGroup() {
         {/* Campo Nome */}
         <div className="relative flex items-center w-full">
           <FormInput
-            label="Nome do consultor"
+            label={`Nome do ${type}`}
             name="nome"
             inputProps={{
               value: filters.nome ?? "",
@@ -90,7 +90,7 @@ export function SearchGroup() {
         {/* Campo Email */}
         <div className="relative flex items-center w-full">
           <FormInput
-            label="Email do consultor"
+            label={`Email do ${type}`}
             name="email"
             inputProps={{
               value: filters.email ?? "",

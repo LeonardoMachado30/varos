@@ -49,7 +49,7 @@ export default async function Dashboard({ searchParams }: Props) {
 
         <div className="flex justify-end items-end flex-col gap-2  mb-6">
           <PrimaryButton
-            href="/cadastro/usuario"
+            href="/usuario"
             className="max-w-[171px] p-4 rounded-lg"
           >
             <span className="flex items-center gap-2">
@@ -64,7 +64,7 @@ export default async function Dashboard({ searchParams }: Props) {
             </span>
           </PrimaryButton>
 
-          <SearchGroup />
+          <SearchGroup type="cliente" />
         </div>
       </div>
 

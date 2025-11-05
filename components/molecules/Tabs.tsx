@@ -40,6 +40,7 @@ export const Tabs: React.FC<TabsProps> = ({
       <div className="flex space-x-2">
         {tabs.map((tab) => (
           <div
+            key={tab.value}
             className={` ${
               activeTab === tab.value && "border-b-4 border-gray-700 "
             }`}

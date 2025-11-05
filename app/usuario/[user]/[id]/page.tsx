@@ -5,11 +5,13 @@ import { FormInput } from "@/components/atomic/input/FormInput";
 import { FormSelect } from "@/components/atomic/input/FormSelect";
 import { Tabs } from "@/components/molecules/Tabs";
 import HeaderForm from "@/components/molecules/HeaderForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { consultorSchema } from "@/utils/zod/schemas/consultor.schema";
 import api from "@/axios";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { pessoaSchema } from "@/utils/zod/schemas/pessoa.schema";
+import { clienteSchema } from "@/utils/zod/schemas/cliente.schema";
 
 type FormConsultor = {
   nome: string;
@@ -20,52 +22,83 @@ type FormConsultor = {
 };
 
 export default function Cadastro() {
+  const params = useParams();
+  const id = params?.id as string;
+  const user = params?.user as string;
+
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({ on: false, label: "" });
   const [errorSubmit, setErrorSubmit] = useState(null);
 
+  const schemaDefault = user === "consultor" ? consultorSchema : clienteSchema;
+
   const methods = useForm({
-    resolver: zodResolver(consultorSchema),
+    resolver: zodResolver(schemaDefault),
     mode: "onChange",
-    defaultValues: {
-      pessoa: {
-        tipoUsuario: "CONSULTOR",
-        nome: "Maria Mockada",
-        telefone: "11 99999-9999",
-        email: "maria.consultora@email.com",
-        idade: 32,
-        cpf: "123.456.789-00",
-        endereco: {
-          cep: "123456-123",
-          estado: "SP",
-          endereco: "Rua das Oliveiras, 123",
-          complemento: "Apto 23",
-        },
-      },
-    },
   });
+
+  const {
+    formState: { errors },
+  } = methods;
+
+  useEffect(() => {
+    console.log(errors);
+  }, [errors]);
+
+  useEffect(() => {
+    const getUsuario = async () => {
+      setErrorSubmit(null);
+      setLoading({ on: true, label: "buscando..." });
+      try {
+        let response = null;
+        if (user === "consultor") {
+          response = await api.get(`/consultor`, { params: { id } });
+        } else {
+          response = await api.get(`/cliente`, { params: { id } });
+        }
+
+        if (response.data.pessoa.createdAt) {
+          delete response.data.pessoa.createdAt;
+        }
+
+        if (response.data.pessoa.updatedAt) {
+          delete response.data.pessoa.updatedAt;
+        }
+        console.log(response.data);
+        if (response.data) {
+          methods.reset(response.data);
+        }
+      } catch (error: any) {
+        setErrorSubmit(error?.response?.data?.message ?? "Erro ao cadastrar");
+        console.error("Erro ao buscar usuário:", error.message || error.data);
+      } finally {
+        setLoading({ on: false, label: "" });
+      }
+    };
+    if (id) getUsuario();
+  }, [id, methods]);
 
   const onSubmit = async (data: any) => {
     setErrorSubmit(null);
-    setLoading(true);
+    setLoading({ on: true, label: id ? "Editando..." : "Cadastrando" });
     try {
-      const response = await api.post(`/clientes`, data);
+      const response = await api.post(`/usuario`, data);
 
-      await router.push("/dashboard");
+      if (response.data) await router.push(`/dashboard/${user}`);
     } catch (error: any) {
       setErrorSubmit(error?.response?.data?.message ?? "Erro ao cadastrar");
       console.error("Erro ao cadastrar cliente:", error.message || error.data);
     } finally {
-      setLoading(false);
+      setLoading({ on: false, label: "" });
     }
   };
 
   return (
-    <HeaderForm form={methods} onSubmit={onSubmit}>
+    <HeaderForm form={methods} onSubmit={onSubmit} type="Editar">
       <div className="min-h-screen p-8 flex justify-center items-start">
         <div className=" shadow-md rounded-2xl p-8 w-full max-w-3xl relative">
           {/* Loading Overlay */}
-          {loading && (
+          {loading.on && (
             <div className="absolute inset-0 z-20 bg-black/60 flex items-center justify-center rounded-2xl">
               <div className="flex flex-col items-center">
                 <svg
@@ -88,11 +121,11 @@ export default function Cadastro() {
                     d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
                   />
                 </svg>
-                <span className="text-white font-medium mt-2">Salvando...</span>
+                <span className="text-white font-medium mt-2">Buscando...</span>
               </div>
             </div>
           )}
-          <h1 className="text-2xl mb-6">Criar usuário</h1>
+          <h1 className="text-2xl mb-6">Editar usuário</h1>
 
           <p className="text-red-500 my-4">{errorSubmit}</p>
 
@@ -104,7 +137,7 @@ export default function Cadastro() {
               placeholder="Selecione o tipo do usuário"
               selectProps={{
                 classNameContainer: "col-span-full",
-                disabled: loading,
+                disabled: loading.on,
               }}
             >
               <option value="CLIENTE">CLIENTE</option>
@@ -116,7 +149,10 @@ export default function Cadastro() {
               orientation="vertical"
               label="Nome do Consultor"
               maskProps={{ mask: /^[A-Za-zÀ-ÿ\s]*$/ }}
-              inputProps={{ placeholder: "Digite o nome", disabled: loading }}
+              inputProps={{
+                placeholder: "Digite o nome",
+                disabled: loading.on,
+              }}
               placeholder="Digite o nome completo"
             />
 
@@ -127,7 +163,7 @@ export default function Cadastro() {
               placeholder="(00) 00000-0000"
               inputProps={{
                 placeholder: "Digite o telefone",
-                disabled: loading,
+                disabled: loading.on,
               }}
               maskProps={{
                 mask: "00 00000-0000",
@@ -142,7 +178,7 @@ export default function Cadastro() {
               inputProps={{
                 placeholder: "Digite o nome",
                 classNameContainer: "col-span-full",
-                disabled: loading,
+                disabled: loading.on,
               }}
               placeholder="exemplo@email.com"
             />
@@ -164,7 +200,7 @@ export default function Cadastro() {
                         type="Idade"
                         inputProps={{
                           placeholder: "28 anos",
-                          disabled: loading,
+                          disabled: loading.on,
                         }}
                       />
                       <FormInput
@@ -174,26 +210,26 @@ export default function Cadastro() {
                         type="cpf"
                         inputProps={{
                           placeholder: "00/00/0000",
-                          disabled: loading,
+                          disabled: loading.on,
                         }}
                       />
                       <FormInput
-                        name="endereco.cep"
+                        name="pessoa.endereco.cep"
                         label="CEP"
                         orientation="vertical"
                         type="cep"
                         maskProps={{ mask: "000000-000" }}
                         inputProps={{
                           placeholder: "000000-000",
-                          disabled: loading,
+                          disabled: loading.on,
                         }}
                       />
 
                       <FormSelect
-                        name="endereco.estado"
+                        name="pessoa.endereco.estado"
                         label="Estado"
                         orientation="vertical"
-                        selectProps={{ disabled: loading }}
+                        selectProps={{ disabled: loading.on }}
                       >
                         <option value="">Selecione o estado</option>
                         <option value="AC">Acre (AC)</option>
@@ -226,24 +262,22 @@ export default function Cadastro() {
                       </FormSelect>
 
                       <FormInput
-                        name="endereco.endereco"
+                        name="pessoa.endereco.rua"
                         label="Digite o endereço"
                         orientation="vertical"
-                        type="endereco"
                         inputProps={{
                           classNameContainer: "col-span-full",
-                          disabled: loading,
+                          disabled: loading.on,
                         }}
                       />
 
                       <FormInput
-                        name="endereco.complemento"
+                        name="pessoa.endereco.complemento"
                         label="Digite o complemento"
                         orientation="vertical"
-                        type="complemento"
                         inputProps={{
                           classNameContainer: "col-span-full",
-                          disabled: loading,
+                          disabled: loading.on,
                         }}
                       />
                     </>
@@ -258,7 +292,7 @@ export default function Cadastro() {
                         name="clientes[]"
                         label="Clientes"
                         orientation="vertical"
-                        selectProps={{ disabled: loading }}
+                        selectProps={{ disabled: loading.on }}
                       >
                         <option value="">Selecione o estado</option>
                       </FormSelect>

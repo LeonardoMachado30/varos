@@ -62,7 +62,7 @@ export default function LoginPage() {
 
         localStorage.setItem("token", token);
 
-        await router.push("/dashboard");
+        await router.push("/dashboard/consultor");
       } else {
         setErrorMsg("Falha ao fazer login. Verifique suas credenciais.");
       }

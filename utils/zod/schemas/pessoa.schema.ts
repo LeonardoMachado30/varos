@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { clienteSchema } from "./cliente.schema";
 
 export const pessoaSchema = z.object({
   id: z.uuid().optional(),
@@ -8,7 +7,6 @@ export const pessoaSchema = z.object({
   }),
   nome: z.string("Nome é obrigatório").min(1, "Nome é obrigatório"),
   cpf: z.string("CPF é obrigatório").min(1, "CPF é obrigatório"),
-  dataNascimento: z.date().optional(),
   telefone: z.string("Telefone é obrigatório"),
   email: z.email().optional(),
   idade: z.number().int().optional(),

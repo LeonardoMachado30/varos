@@ -36,19 +36,17 @@ export async function getClientes({
       };
     }
 
-    // Conta total de registros para paginação
     const totalRegistros = await prisma.cliente.count({
       where,
     });
 
-    // Calcula o total de páginas com base no total de registros e itens por página
     const totalPaginas = Math.ceil(totalRegistros / perPage);
 
     const data = await prisma.cliente.findMany({
       where,
       skip,
       take,
-      orderBy: { createdAt: "desc" },
+      orderBy: { pessoa: { createdAt: "desc" } },
       include: {
         pessoa: {
           include: {
@@ -58,7 +56,7 @@ export async function getClientes({
       },
     });
 
-    const clientes = data.map((c) => ({
+    const cliente = data.map((c) => ({
       id: c.id,
       nome: c.pessoa?.nome ?? "-",
       email: c.pessoa?.email ?? "-",
@@ -67,7 +65,7 @@ export async function getClientes({
       idade: c.pessoa.idade ?? "-",
       cpf: c.pessoa.cpf ?? "-",
       endereco: c.pessoa.endereco
-        ? `${c.pessoa.endereco.cidade} - ${
+        ? `${c.pessoa.endereco.cidade ?? ""} ${
             c.pessoa.endereco.bairro ?? c.pessoa.endereco.estado
           }`
         : "-",
@@ -76,7 +74,7 @@ export async function getClientes({
     }));
 
     return {
-      data: clientes,
+      data: cliente,
       page,
       perPage,
       totalRegistros,
