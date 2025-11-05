@@ -9,9 +9,11 @@ export async function getClienteMetricas7Dias() {
 
   const totalClientes7Dias = await prisma.cliente.count({
     where: {
-      createdAt: {
-        gte: seteDiasAtras,
-        lte: agora,
+      pessoa: {
+        createdAt: {
+          gte: seteDiasAtras,
+          lte: agora,
+        },
       },
     },
   });
