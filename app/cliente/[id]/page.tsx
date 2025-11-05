@@ -12,6 +12,7 @@ interface Cliente {
   createdAt: string;
   updatedAt: string;
   pessoa: {
+    id?: string;
     nome: string;
     email?: string;
     telefone?: string;
@@ -73,7 +74,7 @@ export default function ClientePage() {
             type: "button",
             color: "primary",
             size: "lg",
-            onClick: () => router.push("/usuario/cliente/" + id),
+            onClick: () => router.push("/usuario/cliente/" + cliente.pessoa.id),
           },
           {
             label: "Remover cliente",

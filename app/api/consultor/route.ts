@@ -18,21 +18,14 @@ export async function GET(request: NextRequest) {
       include: {
         pessoa: {
           include: {
-            endereco: {
-              select: {
-                bairro: true,
-                cep: true,
-                cidade: true,
-                complemento: true,
-                estado: true,
-                id: true,
-                numero: true,
-                rua: true,
-              },
-            },
+            endereco: true,
           },
         },
-        clientes: true,
+        clientes: {
+          include: {
+            pessoa: true,
+          },
+        },
       },
     });
 

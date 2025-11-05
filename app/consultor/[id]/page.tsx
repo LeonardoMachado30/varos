@@ -2,31 +2,46 @@
 
 // src/app/consultor/dashboard/cliente/[id]/page.tsx
 import { useEffect, useState, useTransition } from "react";
-import { getClienteById } from "./actions";
+import { getConsultorById } from "./actions";
 import HeaderButtonGroup from "@/components/organims/group/HeaderButtonGroup";
 import { useParams, useRouter } from "next/navigation";
 import LoadingClienteSkeleton from "./loading";
 
-interface Cliente {
+interface Endereco {
+  rua?: string;
+  numero?: string;
+  cidade?: string;
+  estado?: string;
+  bairro?: string;
+  complemento?: string;
+  cep?: string;
+}
+
+interface Pessoa {
+  id: string;
+  nome: string;
+  cpf: string;
+  createdAt: string;
+  updatedAt: string;
+  email: string;
+  telefone: string;
+  idade: number;
+  tipoUsuario: string;
+  endereco: Endereco;
+}
+
+interface Consultor {
   id: string;
   createdAt: string;
   updatedAt: string;
-  pessoa: {
-    nome: string;
-    email?: string;
-    telefone?: string;
-    cpf?: string;
-    idade?: number;
-    endereco?: {
-      rua?: string;
-      numero?: string;
-      cidade?: string;
-      estado?: string;
-      bairro?: string;
-      complemento?: string;
-      cep?: string;
-    };
-  };
+  pessoa: Pessoa;
+
+  clientes: {
+    id: string;
+    consultorId: string;
+    pessoa: Pessoa;
+    pessoaId: string;
+  }[];
 }
 
 export default function ClientePage() {
@@ -35,7 +50,7 @@ export default function ClientePage() {
 
   const router = useRouter();
 
-  const [cliente, setCliente] = useState<Cliente | null>(null);
+  const [consultor, setConsultor] = useState<Consultor | null>(null);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
@@ -43,19 +58,20 @@ export default function ClientePage() {
     if (!id) return;
     startTransition(async () => {
       try {
-        const data = await getClienteById(id);
-        setCliente(data as any);
+        const data = await getConsultorById(id);
+        console.log(data);
+        setConsultor(data as any);
       } catch {
         setError("Erro ao carregar dados do cliente.");
       }
     });
   }, [id]);
 
-  if (isPending && !cliente) {
+  if (isPending && !consultor) {
     return <LoadingClienteSkeleton />;
   }
 
-  if (error || !cliente) {
+  if (error || !consultor) {
     return (
       <div className="max-w-xl mx-auto py-10 px-4">
         <h1 className="text-2xl font-bold mb-4 text-red-400">Erro</h1>
@@ -64,7 +80,7 @@ export default function ClientePage() {
     );
   }
 
-  const { pessoa } = cliente;
+  const { pessoa } = consultor;
 
   return (
     <>
@@ -76,7 +92,8 @@ export default function ClientePage() {
             type: "button",
             color: "primary",
             size: "lg",
-            onClick: () => router.push("/usuario/consultor/" + id),
+            onClick: () =>
+              router.push("/usuario/consultor/" + consultor.pessoa?.id),
           },
           {
             label: "Remover consultor",
@@ -168,6 +185,48 @@ export default function ClientePage() {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="max-w-xl mx-auto py-10 px-4">
+        <h1 className="text-3xl mb-4">Clientes</h1>
+
+        {Array.isArray(consultor.clientes) && consultor.clientes.length > 0 ? (
+          <div className="flex flex-col gap-6">
+            {consultor.clientes.map((cliente) => (
+              <div
+                key={cliente.id}
+                className="bg-[#131516] text-[#B0B7BE] border-[#222729] border p-6 rounded-lg shadow flex gap-3 flex-col"
+              >
+                <p>
+                  <span className="font-semibold">Nome:</span>{" "}
+                  {cliente.pessoa?.nome || "-"}
+                </p>
+                <p>
+                  <span className="font-semibold">Email:</span>{" "}
+                  {cliente.pessoa?.email || "-"}
+                </p>
+                <p>
+                  <span className="font-semibold">Telefone:</span>{" "}
+                  {cliente.pessoa?.telefone || "-"}
+                </p>
+                <p>
+                  <span className="font-semibold">CPF:</span>{" "}
+                  {cliente.pessoa?.cpf || "-"}
+                </p>
+                <p>
+                  <span className="font-semibold">Idade:</span>{" "}
+                  {cliente.pessoa?.idade ?? "-"}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="bg-[#131516] text-[#B0B7BE] border-[#222729] border p-6 rounded-lg shadow flex gap-3 flex-col">
+            <p className="text-center text-gray-400">
+              Nenhum cliente cadastrado.
+            </p>
+          </div>
+        )}
       </div>
     </>
   );

@@ -10,6 +10,18 @@ export const GET = async (
 
     const cliente = await prisma.cliente.findUnique({
       where: { id },
+      include: {
+        pessoa: {
+          include: {
+            endereco: true,
+          },
+        },
+        consultor: {
+          include: {
+            pessoa: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(cliente);
