@@ -42,10 +42,6 @@ export default function Cadastro() {
   } = methods;
 
   useEffect(() => {
-    console.log(errors);
-  }, [errors]);
-
-  useEffect(() => {
     const getUsuario = async () => {
       setErrorSubmit(null);
       setLoading({ on: true, label: "buscando..." });
@@ -64,7 +60,6 @@ export default function Cadastro() {
         if (response.data.pessoa.updatedAt) {
           delete response.data.pessoa.updatedAt;
         }
-        console.log(response.data);
         if (response.data) {
           methods.reset(response.data);
         }
