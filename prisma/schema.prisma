@@ -34,11 +34,12 @@ model Cliente {
   id String @id @default(uuid(7))
 
   consultor   Consultor? @relation(fields: [consultorId], references: [id])
-  consultorId String?    @unique
+  consultorId String?
 
   pessoa   Pessoa @relation(fields: [pessoaId], references: [id])
   pessoaId String @unique
 
+  @@index([consultorId]) // ← ADICIONADO índice para performance
   @@index([pessoaId])
 }
 
