@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "80c99aba-5d2c-4fd6-97fc-6a1dede6719c",
+		"name": "Varos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15523764"
+	},
+	"item": [
+		{
+			"name": "Cliente",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Flávio Pádua\",\r\n    \"email\": \"flavio@exemplo.com\",\r\n    \"tipoCliente\": \"CONSULTOR\",\r\n    \"telefone\": \"61981095126\",\r\n    \"cpf\": \"034234234\",\r\n    \"idade\": \"23\",\r\n    \"endereco\": {\r\n        \"cep\": \"23123\",\r\n        \"cidade\": \"Gama\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/clientes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ClienteId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/clientes/019a4ab9-f5e9-7ea2-9da3-afbf5f38ebc5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"clientes",
+						"019a4ab9-f5e9-7ea2-9da3-afbf5f38ebc5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cliente",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nome\": \"Flávio Pádua\",\r\n    \"email\": \"flavio@exemplo.com\",\r\n    \"tipoCliente\": \"CONSULTOR\",\r\n    \"telefone\": \"61981095126\",\r\n    \"cpf\": \"034234234\",\r\n    \"idade\": 23,\r\n    \"endereco\": {\r\n        \"cep\": \"23123\",\r\n        \"cidade\": \"Gama\",\r\n        \"estado\": \"DF\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/clientes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ClienteAll",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n        \"cpf\": \"957.949.203-43\",\r\n        \"nome\": \"Sofia Almeida\",\r\n        \"email\": \"sofia.almeida@gmail.com\",\r\n        \"telefone\": \"40 8717-7983\",\r\n        \"idade\": \"21\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"39864-591\",\r\n            \"estado\": \"RO\",\r\n            \"rua\": \"Rua das Flores 703\",\r\n            \"complemento\": \"Apto 424\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"155.214.678-12\",\r\n        \"nome\": \"Lucas Moreira\",\r\n        \"email\": \"lucas.moreira@outlook.com\",\r\n        \"telefone\": \"86 97264-2513\",\r\n        \"idade\": \"29\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"75522-468\",\r\n            \"estado\": \"GO\",\r\n            \"rua\": \"Rua do Sol 977\",\r\n            \"complemento\": \"Apto 77\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"402.891.734-90\",\r\n        \"nome\": \"Mariana Silva\",\r\n        \"email\": \"mariana.silva@yahoo.com.br\",\r\n        \"telefone\": \"21 98017-4621\",\r\n        \"idade\": \"33\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"18497-373\",\r\n            \"estado\": \"SP\",\r\n            \"rua\": \"Rua das Acacias 480\",\r\n            \"complemento\": \"Apto 312\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"318.074.005-06\",\r\n        \"nome\": \"Gabriel Costa\",\r\n        \"email\": \"gabriel.costa@protonmail.com\",\r\n        \"telefone\": \"11 97284-1563\",\r\n        \"idade\": \"26\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"56971-122\",\r\n            \"estado\": \"PE\",\r\n            \"rua\": \"Rua da Liberdade 55\",\r\n            \"complemento\": \"Apto 12\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"826.315.092-58\",\r\n        \"nome\": \"Ana Beatriz Souza\",\r\n        \"email\": \"ana.beatriz.souza@gmail.com\",\r\n        \"telefone\": \"31 9217-3499\",\r\n        \"idade\": \"38\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"53086-245\",\r\n            \"estado\": \"PE\",\r\n            \"rua\": \"Rua dos Andradas 201\",\r\n            \"complemento\": \"Apto 19\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"041.723.860-06\",\r\n        \"nome\": \"Rafael Oliveira\",\r\n        \"email\": \"rafael.oliveira@hotmail.com\",\r\n        \"telefone\": \"48 91234-5678\",\r\n        \"idade\": \"41\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"84028-013\",\r\n            \"estado\": \"PR\",\r\n            \"rua\": \"Rua das Oliveiras 6\",\r\n            \"complemento\": \"Apto 3\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"629.480.105-30\",\r\n        \"nome\": \"Camila Rodrigues\",\r\n        \"email\": \"camila.rodrigues@outlook.com\",\r\n        \"telefone\": \"62 98123-4455\",\r\n        \"idade\": \"27\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"78044-210\",\r\n            \"estado\": \"MT\",\r\n            \"rua\": \"Rua da Paz 88\",\r\n            \"complemento\": \"Apto 215\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"512.038.477-00\",\r\n        \"nome\": \"Pedro Henrique Lima\",\r\n        \"email\": \"pedro.henrique.lima@gmail.com\",\r\n        \"telefone\": \"71 9123-4567\",\r\n        \"idade\": \"35\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"40312-905\",\r\n            \"estado\": \"BA\",\r\n            \"rua\": \"Rua das Flores 12\",\r\n            \"complemento\": \"Apto 8\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"204.936.581-81\",\r\n        \"nome\": \"Emilia Dantas\",\r\n        \"email\": \"emilia.cliente@gmail.com\",\r\n        \"telefone\": \"32 42342-3423\",\r\n        \"idade\": \"34\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"234234-234\",\r\n            \"estado\": \"PA\",\r\n            \"rua\": \"sdasdasd\",\r\n            \"complemento\": \"asdasdasd\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"693.517.200-04\",\r\n        \"nome\": \"Thiago Pereira\",\r\n        \"email\": \"thiago.pereira@yahoo.com.br\",\r\n        \"telefone\": \"85 99876-5432\",\r\n        \"idade\": \"30\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"60111-222\",\r\n            \"estado\": \"CE\",\r\n            \"rua\": \"Rua do Sol 14\",\r\n            \"complemento\": \"Apto 5\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"470.621.305-39\",\r\n        \"nome\": \"Larissa Gomes\",\r\n        \"email\": \"larissa.gomes@gmail.com\",\r\n        \"telefone\": \"47 98877-6655\",\r\n        \"idade\": \"28\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"89250-111\",\r\n            \"estado\": \"SC\",\r\n            \"rua\": \"Rua das Acacias 299\",\r\n            \"complemento\": \"Apto 101\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"381.905.642-06\",\r\n        \"nome\": \"Bruno Fernandes\",\r\n        \"email\": \"bruno.fernandes@outlook.com\",\r\n        \"telefone\": \"27 97654-3210\",\r\n        \"idade\": \"44\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"29010-210\",\r\n            \"estado\": \"ES\",\r\n            \"rua\": \"Rua da Liberdade 333\",\r\n            \"complemento\": \"Apto 401\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"549.330.816-11\",\r\n        \"nome\": \"Isabela Nogueira\",\r\n        \"email\": \"isabela.nogueira@gmail.com\",\r\n        \"telefone\": \"65 99911-2233\",\r\n        \"idade\": \"24\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"78005-440\",\r\n            \"estado\": \"MT\",\r\n            \"rua\": \"Rua das Oliveiras 90\",\r\n            \"complemento\": \"Apto 27\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"273.840.509-07\",\r\n        \"nome\": \"Matheus Carvalho\",\r\n        \"email\": \"matheus.carvalho@protonmail.com\",\r\n        \"telefone\": \"69 98111-2233\",\r\n        \"idade\": \"31\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"76805-333\",\r\n            \"estado\": \"RO\",\r\n            \"rua\": \"Rua dos Andradas 7\",\r\n            \"complemento\": \"Apto 66\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"628.170.004-30\",\r\n        \"nome\": \"Julia Ribeiro\",\r\n        \"email\": \"julia.ribeiro@hotmail.com\",\r\n        \"telefone\": \"41 91234-9876\",\r\n        \"idade\": \"36\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"80530-210\",\r\n            \"estado\": \"PR\",\r\n            \"rua\": \"Rua da Paz 12\",\r\n            \"complemento\": \"Apto 2\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"044.251.639-73\",\r\n        \"nome\": \"Gustavo Santos\",\r\n        \"email\": \"gustavo.santos@gmail.com\",\r\n        \"telefone\": \"51 99822-3344\",\r\n        \"idade\": \"47\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"90020-330\",\r\n            \"estado\": \"RS\",\r\n            \"rua\": \"Rua das Flores 1\",\r\n            \"complemento\": \"Apto 9\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"190.805.427-60\",\r\n        \"nome\": \"Paula Mendes\",\r\n        \"email\": \"paula.mendes@outlook.com\",\r\n        \"telefone\": \"11 99777-6655\",\r\n        \"idade\": \"39\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"01234-567\",\r\n            \"estado\": \"SP\",\r\n            \"rua\": \"Rua do Sol 2\",\r\n            \"complemento\": \"Apto 100\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"821.309.544-12\",\r\n        \"nome\": \"Felipe Barros\",\r\n        \"email\": \"felipe.barros@yahoo.com.br\",\r\n        \"telefone\": \"38 97766-5544\",\r\n        \"idade\": \"32\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"39400-880\",\r\n            \"estado\": \"MG\",\r\n            \"rua\": \"Rua das Oliveiras 12\",\r\n            \"complemento\": \"Apto 58\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"603.418.255-10\",\r\n        \"nome\": \"Marina Castro\",\r\n        \"email\": \"marina.castro@gmail.com\",\r\n        \"telefone\": \"73 98321-4455\",\r\n        \"idade\": \"22\",\r\n        \"tipoUsuario\": \"CLIENTE\",\r\n        \"endereco\": {\r\n            \"cep\": \"45810-001\",\r\n            \"estado\": \"BA\",\r\n            \"rua\": \"Rua da Liberdade 90\",\r\n            \"complemento\": \"Apto 6\"\r\n        }\r\n    },\r\n    {\r\n        \"cpf\": \"735.126.941-60\",\r\n        \"nome\": \"Emilia Dantas\",\r\n        \"email\": \"emilia.dantas@hotmail.com\",\r\n        \"telefone\": \"97 8959-9544\",\r\n        \"idade\": \"50\",\r\n        \"tipoUsuario\": \"CONSULTOR\",\r\n        \"endereco\": {\r\n            \"cep\": \"20882-752\",\r\n            \"estado\": \"CE\",\r\n            \"rua\": \"Rua do Sol 497\",\r\n            \"complemento\": \"Apto 812\"\r\n        }\r\n    }\r\n]\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/clientes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"clientes"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
