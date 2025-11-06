@@ -46,16 +46,19 @@ const FormBasics = ({ loading }: { loading: boolean }) => {
           disabled: loading,
         }}
       />
+
       <FormInput
         name="cpf"
         label="CPF"
         orientation="vertical"
         type="cpf"
+        maskProps={{ mask: "000.000.000-00" }}
         inputProps={{
           placeholder: "000.000.000-00",
           disabled: loading,
         }}
       />
+
       <FormInput
         name="endereco.cep"
         label="CEP"
@@ -501,7 +504,7 @@ export default function Cadastro() {
             />
 
             <FormInput
-              name="pessoa.telefone"
+              name="telefone"
               label="Telefone"
               orientation="vertical"
               placeholder="(00) 00000-0000"
@@ -515,7 +518,7 @@ export default function Cadastro() {
             />
 
             <FormInput
-              name="pessoa.email"
+              name="email"
               label="E-mail"
               orientation="vertical"
               type="email"
