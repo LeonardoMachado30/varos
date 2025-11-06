@@ -1,109 +1,26 @@
-"use client";
-
 // src/app/consultor/dashboard/cliente/[id]/page.tsx
-import { useEffect, useState, useTransition } from "react";
 import { getConsultorById } from "./actions";
-import HeaderButtonGroup from "@/components/organims/group/HeaderButtonGroup";
-import { useParams, useRouter } from "next/navigation";
-import LoadingClienteSkeleton from "./loading";
+import ButtonGroup from "@/components/organims/group/ButtonGroup";
 
-interface Endereco {
-  rua?: string;
-  numero?: string;
-  cidade?: string;
-  estado?: string;
-  bairro?: string;
-  complemento?: string;
-  cep?: string;
+interface ConsultorPageProps {
+  params: {
+    id: string; // O ID será sempre uma string, mesmo que seja um número
+  };
 }
 
-interface Pessoa {
-  id: string;
-  nome: string;
-  cpf: string;
-  createdAt: string;
-  updatedAt: string;
-  email: string;
-  telefone: string;
-  idade: number;
-  tipoUsuario: string;
-  endereco: Endereco;
-}
+export default async function ConsultorPage({ params }: ConsultorPageProps) {
+  const consultorParams = await params;
+  const consultor = await getConsultorById(consultorParams.id);
 
-interface Consultor {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  pessoa: Pessoa;
-
-  clientes: {
-    id: string;
-    consultorId: string;
-    pessoa: Pessoa;
-    pessoaId: string;
-  }[];
-}
-
-export default function ClientePage() {
-  const params = useParams();
-  const id = params?.id as string;
-
-  const router = useRouter();
-
-  const [consultor, setConsultor] = useState<Consultor | null>(null);
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!id) return;
-    startTransition(async () => {
-      try {
-        const data = await getConsultorById(id);
-        console.log(data);
-        setConsultor(data as any);
-      } catch {
-        setError("Erro ao carregar dados do cliente.");
-      }
-    });
-  }, [id]);
-
-  if (isPending && !consultor) {
-    return <LoadingClienteSkeleton />;
-  }
-
-  if (error || !consultor) {
-    return (
-      <div className="max-w-xl mx-auto py-10 px-4">
-        <h1 className="text-2xl font-bold mb-4 text-red-400">Erro</h1>
-        <p>{error || "Cliente não encontrado."}</p>
-      </div>
-    );
+  if (!consultor) {
+    return null;
   }
 
   const { pessoa } = consultor;
 
   return (
     <>
-      <HeaderButtonGroup
-        type="consultor"
-        buttons={[
-          {
-            label: "Editar consultor",
-            type: "button",
-            color: "primary",
-            size: "lg",
-            onClick: () =>
-              router.push("/usuario/consultor/" + consultor.pessoa?.id),
-          },
-          {
-            label: "Remover consultor",
-            type: "button",
-            color: "secondary",
-            size: "lg",
-            onClick: () => alert("Editar ainda não implementado"),
-          },
-        ]}
-      />
+      <ButtonGroup url={`/usuario/consultor/${consultor.pessoa.id}`} />
 
       <div className="max-w-xl mx-auto py-10 px-4">
         <h1 className="text-3xl mb-4">Detalhes do Consultor</h1>

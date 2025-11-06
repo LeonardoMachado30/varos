@@ -8,7 +8,7 @@ export interface Search {
   periodo?: string;
 }
 
-export async function getClientes({
+export async function getConsultor({
   search = {},
   page = 1,
 }: {

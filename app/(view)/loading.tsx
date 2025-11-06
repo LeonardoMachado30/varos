@@ -1,7 +1,6 @@
 export default function LoadingClienteSkeleton() {
   return (
     <>
-      {/* Header Skeleton */}
       <div className="w-full border-b border-gray-800 shadow-sm sticky top-0 z-30 py-4">
         <div className="mx-auto px-6 py-4 flex items-center justify-end gap-2 h-full">
           <div className="h-10 w-36 rounded-4xl bg-[#23272b] animate-pulse" />

@@ -475,6 +475,7 @@ export default function Cadastro() {
               </div>
             </div>
           )}
+          
           <h1 className="text-2xl mb-6">Criar usuário</h1>
 
           <p className="text-red-500 my-4">{errorSubmit}</p>

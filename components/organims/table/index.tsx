@@ -41,7 +41,7 @@ export default function Table({
   const handleRowClick = (
     row: any,
     index: number,
-    e: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+    e: any // generic for td/card click
   ) => {
     if (onRowClick) {
       onRowClick(row, index, e);
@@ -94,17 +94,27 @@ export default function Table({
     );
   };
 
+  // helpers for cell value display
+  function getDisplayValue(value: any) {
+    if (value instanceof Date) {
+      const day = value.getDate().toString().padStart(2, "0");
+      const month = (value.getMonth() + 1).toString().padStart(2, "0");
+      const year = value.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+    return value ?? "-";
+  }
+
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse">
+      {/* Desktop Table */}
+      <table className="min-w-full border-collapse hidden md:table">
         <thead>
           <tr className="bg-[#131313] text-white text-left border-2 border-[#222729]">
             {columns.map((column) => (
               <th
                 key={column.key}
-                className={`py-8 px-4 font-semibold text-sm uppercase tracking-wide border-b border-[#222729] ${
-                  column.className || ""
-                }`}
+                className={`py-8 px-4 font-semibold text-sm uppercase tracking-wide border-b border-[#222729] ${column.className || ""}`}
               >
                 {column.label}
               </th>
@@ -117,46 +127,53 @@ export default function Table({
               <tr
                 key={index}
                 tabIndex={0}
-                className="bg-[#131516] border-b border-[#222729] cursor-pointer hover:bg-[#18191b] transition-colors "
+                className="bg-[#131516] border-b border-[#222729] cursor-pointer hover:bg-[#18191b] transition-colors"
                 onClick={(e) => handleRowClick(row, index, e)}
               >
-                {columns.map((col) => {
-                  const value = row[col.key];
-
-                  let displayValue = value;
-                  if (value instanceof Date) {
-                    const day = value.getDate().toString().padStart(2, "0");
-                    const month = (value.getMonth() + 1)
-                      .toString()
-                      .padStart(2, "0");
-                    const year = value.getFullYear();
-                    displayValue = `${day}/${month}/${year}`;
-                  }
-
-                  return (
-                    <td
-                      key={col.key}
-                      className="py-8 px-4 text-sm text-[#B0B7BE]"
-                    >
-                      {displayValue ?? "-"}
-                    </td>
-                  );
-                })}
+                {columns.map((col) => (
+                  <td
+                    key={col.key}
+                    className="py-8 px-4 text-sm text-[#B0B7BE]"
+                  >
+                    {getDisplayValue(row[col.key])}
+                  </td>
+                ))}
               </tr>
             ))
           ) : (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="text-center text-gray-500 py-8"
-              >
+              <td colSpan={columns.length} className="text-center text-gray-500 py-8">
                 Nenhum registro encontrado.
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      {/* Controles de paginação */}
+
+      {/* Mobile Cards */}
+      <div className="flex flex-col gap-4 md:hidden">
+        {data.length > 0 ? (
+          data.map((row, index) => (
+            <div
+              key={index}
+              className="bg-[#18191b] border border-[#222729] rounded-lg p-4 cursor-pointer shadow transition hover:bg-[#222229]"
+              onClick={(e) => handleRowClick(row, index, e)}
+              tabIndex={0}
+            >
+              {columns.map((col) => (
+                <div key={col.key} className="flex justify-between items-center py-1 border-b border-[#222729] last:border-b-0">
+                  <span className="font-semibold text-xs uppercase text-[#B0B7BE]">{col.label}</span>
+                  <span className="text-sm text-[#E6EAF0] ml-4">{getDisplayValue(row[col.key])}</span>
+                </div>
+              ))}
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-500 py-8">
+            Nenhum registro encontrado.
+          </div>
+        )}
+      </div>
       {renderPagination()}
     </div>
   );

@@ -1,3 +1,4 @@
+"use client";
 import { PrimaryButton } from "@/components/atomic/button/PrimaryButton";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,7 +23,7 @@ export default function HeaderButtonGroup({
 }: HeaderButtonGroupProps) {
   return (
     <header className="w-full border-b border-gray-800 shadow-sm sticky top-0 z-30 py-4">
-      <div className="mx-auto px-6 py-4 flex items-center justify-between text-gray-400 h-full gap-1">
+      <div className="mx-auto px-6 py-4 flex items-center justify-between text-gray-400 h-full gap-2 flex-col md:flex-row ">
         <Link href={`/dashboard/${type}`}>
           <Image src="/logo.svg" width={100} height={40} alt="logo" />
         </Link>
@@ -32,8 +33,8 @@ export default function HeaderButtonGroup({
               key={idx}
               type={btn.type || "button"}
               color={btn.color || "primary"}
-              className={btn.className || "rounded-4xl"}
-              size={btn.size || "lg"}
+              className={btn.className || "rounded-4xl "}
+              size={btn.size || window.screen.width < 980 ? "md" : "lg"}
               onClick={btn.onClick as React.MouseEventHandler<Element>}
             >
               {btn.label}
